@@ -58,7 +58,7 @@ try {
   await client.query('COMMIT');
   console.log('ok схема и демонстрационный набор');
 
-  for (const file of ['004_roles_icd.sql', '005_specialties.sql']) {
+  for (const file of ['004_roles_icd.sql', '005_specialties.sql', '006_icd_chapters.sql']) {
     await client.query('BEGIN');
     await client.query(await body(`database/migrations/${file}`));
     await client.query('COMMIT');

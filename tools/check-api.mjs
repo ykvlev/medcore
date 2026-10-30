@@ -66,7 +66,11 @@ try {
   const denied = await request(`/api/patients/${fixtureId}/diagnoses`, { cookie: registrar, method: 'POST', body: { caseId: 1, diagnosisId: 1, isPrimary: false, note: 'Access rejection test' } });
   assert(denied.status === 403, 'TC-05 API: registrar cannot create a diagnosis', { status: denied.status });
 
-  db = new Client({ ssl: process.env.PGSSLMODE === 'disable' ? false : { rejectUnauthorized: true }, connectionTimeoutMillis: 12000, statement_timeout: 10000 });
+  // Прямая сверка идёт в ту же базу, что и API: для внешнего стенда адрес
+  // передаётся через MEDCORE_DATABASE_URL, иначе используются PG* из .env.
+  db = new Client(process.env.MEDCORE_DATABASE_URL
+    ? { connectionString: process.env.MEDCORE_DATABASE_URL, ssl: /sslmode=disable/.test(process.env.MEDCORE_DATABASE_URL) ? false : { rejectUnauthorized: false }, connectionTimeoutMillis: 12000, statement_timeout: 10000 }
+    : { ssl: process.env.PGSSLMODE === 'disable' ? false : { rejectUnauthorized: true }, connectionTimeoutMillis: 12000, statement_timeout: 10000 });
   await db.connect();
   const persisted = (await db.query('SELECT phone,version FROM project.patients WHERE id=$1 AND last_name=$2', [fixtureId, marker])).rows[0];
   assert(persisted?.phone === contacts.phone, 'patient change is verified directly in PostgreSQL');

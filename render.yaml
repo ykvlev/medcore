@@ -1,0 +1,25 @@
+# Render Blueprint: сервер MEDCORE в Docker-контейнере.
+# Секреты (строка подключения и домен клиента) задаются в панели Render.
+services:
+  - type: web
+    name: medcore-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:8080
+      # Клиент и API на разных доменах: cookie должна быть SameSite=None.
+      - key: MEDCORE_COOKIE_SAMESITE
+        value: None
+      # Домен клиента на Vercel, например https://medcore.vercel.app
+      - key: MEDCORE_FRONTEND_ORIGINS
+        sync: false
+      # Строка подключения Npgsql к внешнему PostgreSQL (Neon).
+      - key: ConnectionStrings__Medcore
+        sync: false

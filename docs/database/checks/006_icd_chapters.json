@@ -1,0 +1,75 @@
+{
+  "performedAt": "2026-10-30T19:55:53.399Z",
+  "file": "database/migrations/006_icd_chapters.sql",
+  "sha256": "11f07dd2c7b7b3f43496f67b9293bc8d5acfae41999faf85aa1caa4b75990a4c",
+  "result": "passed",
+  "database": "db_a_s_yakovlev",
+  "serverVersion": "PostgreSQL 18.0 on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "roles": [
+    {
+      "code": "analyst",
+      "name": "Аналитик"
+    },
+    {
+      "code": "chief_physician",
+      "name": "Главный врач"
+    },
+    {
+      "code": "deputy_chief_physician",
+      "name": "Заместитель главного врача"
+    },
+    {
+      "code": "doctor",
+      "name": "Врач"
+    },
+    {
+      "code": "governor",
+      "name": "Губернатор"
+    },
+    {
+      "code": "head_of_department",
+      "name": "Заведующий отделением"
+    },
+    {
+      "code": "lab_staff",
+      "name": "Сотрудник лаборатории"
+    },
+    {
+      "code": "minister_of_health",
+      "name": "Министр здравоохранения"
+    },
+    {
+      "code": "organization_admin",
+      "name": "Администратор организации"
+    },
+    {
+      "code": "registrar",
+      "name": "Регистратор"
+    },
+    {
+      "code": "system_admin",
+      "name": "Системный администратор"
+    }
+  ],
+  "diagnoses": {
+    "total": 47,
+    "with_chapter": 47
+  },
+  "users": [
+    "admin",
+    "analyst",
+    "chief",
+    "deputy",
+    "doctor",
+    "governor",
+    "head",
+    "lab",
+    "manager",
+    "minister",
+    "registrar"
+  ],
+  "scopes": {
+    "total": 23,
+    "departments": 1
+  }
+}

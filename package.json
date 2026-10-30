@@ -8,5 +8,8 @@
   "devDependencies": {
     "@electric-sql/pglite": "0.3.14",
     "pg": "8.23.1"
+  },
+  "dependencies": {
+    "vercel": "^65.8.0"
   }
 }
