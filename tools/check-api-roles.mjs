@@ -1,6 +1,6 @@
-// Проверка ролей и областей MEDCORE на живом API. Только чтение и «безопасные»
-// запросы, которые при отсутствии прав возвращают 403 до валидации тела.
-// Отчёт: docs/database/checks/api-roles-report.json.
+﻿// РџСЂРѕРІРµСЂРєР° СЂРѕР»РµР№ Рё РѕР±Р»Р°СЃС‚РµР№ MEDCORE РЅР° Р¶РёРІРѕРј API. РўРѕР»СЊРєРѕ С‡С‚РµРЅРёРµ Рё В«Р±РµР·РѕРїР°СЃРЅС‹РµВ»
+// Р·Р°РїСЂРѕСЃС‹, РєРѕС‚РѕСЂС‹Рµ РїСЂРё РѕС‚СЃСѓС‚СЃС‚РІРёРё РїСЂР°РІ РІРѕР·РІСЂР°С‰Р°СЋС‚ 403 РґРѕ РІР°Р»РёРґР°С†РёРё С‚РµР»Р°.
+// РћС‚С‡С‘С‚: docs/database/checks/api-roles-report.json.
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -26,7 +26,7 @@ async function request(endpoint, { cookie, method = 'GET', body } = {}) {
   const response = await fetch(base + endpoint, {
     method,
     headers: {
-      Accept: 'application/json', Origin: 'http://127.0.0.1:5173',
+      Accept: 'application/json', Origin: process.env.MEDCORE_ORIGIN ?? 'http://127.0.0.1:5173',
       ...(cookie ? { Cookie: cookie } : {}),
       ...(body ? { 'Content-Type': 'application/json' } : {})
     },
@@ -50,14 +50,14 @@ try {
   for (const [login, role] of accounts) {
     const response = await fetch(base + '/api/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Origin: 'http://127.0.0.1:5173' },
+      headers: { 'Content-Type': 'application/json', Origin: process.env.MEDCORE_ORIGIN ?? 'http://127.0.0.1:5173' },
       body: JSON.stringify({ login, password: process.env.MEDCORE_DEMO_PASSWORD }),
       signal: AbortSignal.timeout(30000)
     });
     const cookie = response.headers.getSetCookie().map(v => v.split(';')[0]).join('; ');
     const data = await response.json().catch(() => undefined);
     sessions.set(role, cookie);
-    check(response.status === 200 && data?.roles?.includes(role), `${login}: вход и роль ${role}`,
+    check(response.status === 200 && data?.roles?.includes(role), `${login}: РІС…РѕРґ Рё СЂРѕР»СЊ ${role}`,
       { status: response.status, roles: data?.roles });
   }
 
@@ -80,7 +80,7 @@ try {
   ];
   for (const [role, endpoint, expected] of allowed) {
     const result = await request(endpoint, { cookie: sessions.get(role) });
-    check(result.status === expected, `${role}: ${endpoint} → ${expected}`, { status: result.status });
+    check(result.status === expected, `${role}: ${endpoint} в†’ ${expected}`, { status: result.status });
   }
 
   const denied = [
@@ -97,35 +97,35 @@ try {
   ];
   for (const [role, endpoint, expectedStatus = 403] of denied) {
     const result = await request(endpoint, { cookie: sessions.get(role) });
-    check(result.status === expectedStatus, `${role}: ${endpoint} → ${expectedStatus}`, { status: result.status });
+    check(result.status === expectedStatus, `${role}: ${endpoint} в†’ ${expectedStatus}`, { status: result.status });
   }
 
-  // Запись структуры: заместитель главврача не управляет структурой. Проверяем на
-  // чужой больнице с валидным телом — отказ 403 приходит до любой записи.
+  // Р—Р°РїРёСЃСЊ СЃС‚СЂСѓРєС‚СѓСЂС‹: Р·Р°РјРµСЃС‚РёС‚РµР»СЊ РіР»Р°РІРІСЂР°С‡Р° РЅРµ СѓРїСЂР°РІР»СЏРµС‚ СЃС‚СЂСѓРєС‚СѓСЂРѕР№. РџСЂРѕРІРµСЂСЏРµРј РЅР°
+  // С‡СѓР¶РѕР№ Р±РѕР»СЊРЅРёС†Рµ СЃ РІР°Р»РёРґРЅС‹Рј С‚РµР»РѕРј вЂ” РѕС‚РєР°Р· 403 РїСЂРёС…РѕРґРёС‚ РґРѕ Р»СЋР±РѕР№ Р·Р°РїРёСЃРё.
   const structure = await request('/api/hospitals/9/buildings', {
     cookie: sessions.get('deputy_chief_physician'), method: 'POST', body: { number: 'ROLE-CHECK' }
   });
-  check(structure.status === 403, 'deputy_chief_physician: изменение структуры запрещено', { status: structure.status });
+  check(structure.status === 403, 'deputy_chief_physician: РёР·РјРµРЅРµРЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ Р·Р°РїСЂРµС‰РµРЅРѕ', { status: structure.status });
 
-  // Министр и губернатор видят все 13 организаций, главврач — одну.
+  // РњРёРЅРёСЃС‚СЂ Рё РіСѓР±РµСЂРЅР°С‚РѕСЂ РІРёРґСЏС‚ РІСЃРµ 13 РѕСЂРіР°РЅРёР·Р°С†РёР№, РіР»Р°РІРІСЂР°С‡ вЂ” РѕРґРЅСѓ.
   const ministerOrganizations = await request('/api/organizations?page=1&pageSize=100', { cookie: sessions.get('minister_of_health') });
-  check(ministerOrganizations.data?.total === 13, 'minister_of_health: все 13 организаций', { total: ministerOrganizations.data?.total });
+  check(ministerOrganizations.data?.total === 13, 'minister_of_health: РІСЃРµ 13 РѕСЂРіР°РЅРёР·Р°С†РёР№', { total: ministerOrganizations.data?.total });
   const chiefOrganizations = await request('/api/organizations?page=1&pageSize=100', { cookie: sessions.get('chief_physician') });
-  check(chiefOrganizations.data?.total === 1, 'chief_physician: только своя больница', { total: chiefOrganizations.data?.total });
+  check(chiefOrganizations.data?.total === 1, 'chief_physician: С‚РѕР»СЊРєРѕ СЃРІРѕСЏ Р±РѕР»СЊРЅРёС†Р°', { total: chiefOrganizations.data?.total });
 
-  // МКБ-10 и случаи лечения.
-  const diagnoses = await request('/api/diagnoses?search=гипертенз', { cookie: sessions.get('doctor') });
+  // РњРљР‘-10 Рё СЃР»СѓС‡Р°Рё Р»РµС‡РµРЅРёСЏ.
+  const diagnoses = await request('/api/diagnoses?search=РіРёРїРµСЂС‚РµРЅР·', { cookie: sessions.get('doctor') });
   check(diagnoses.status === 200 && diagnoses.data?.items?.some(d => d.code === 'I10' && d.chapter),
-    'МКБ-10: поиск по названию находит I10 с главой', { items: diagnoses.data?.items?.length });
+    'РњРљР‘-10: РїРѕРёСЃРє РїРѕ РЅР°Р·РІР°РЅРёСЋ РЅР°С…РѕРґРёС‚ I10 СЃ РіР»Р°РІРѕР№', { items: diagnoses.data?.items?.length });
   const cases = await request('/api/patients/216/cases', { cookie: sessions.get('chief_physician') });
-  check(cases.status === 200 && Array.isArray(cases.data?.items), 'chief_physician: случаи лечения доступны',
+  check(cases.status === 200 && Array.isArray(cases.data?.items), 'chief_physician: СЃР»СѓС‡Р°Рё Р»РµС‡РµРЅРёСЏ РґРѕСЃС‚СѓРїРЅС‹',
     { cases: cases.data?.items?.length });
 
-  // Карточка пациента содержит историю болезни с кодом МКБ.
+  // РљР°СЂС‚РѕС‡РєР° РїР°С†РёРµРЅС‚Р° СЃРѕРґРµСЂР¶РёС‚ РёСЃС‚РѕСЂРёСЋ Р±РѕР»РµР·РЅРё СЃ РєРѕРґРѕРј РњРљР‘.
   const card = await request('/api/patients/216', { cookie: sessions.get('doctor') });
   const history = card.data?.history ?? [];
   check(card.status === 200 && history.some(item => item.type === 'diagnosis' && /\b[A-Z]\d{2}/.test(item.title ?? '')),
-    'карточка пациента: история содержит диагноз с кодом МКБ', { history: history.length });
+    'РєР°СЂС‚РѕС‡РєР° РїР°С†РёРµРЅС‚Р°: РёСЃС‚РѕСЂРёСЏ СЃРѕРґРµСЂР¶РёС‚ РґРёР°РіРЅРѕР· СЃ РєРѕРґРѕРј РњРљР‘', { history: history.length });
 
   report.result = failures.length === 0 ? 'passed' : 'failed';
   report.failed = failures;
@@ -140,6 +140,7 @@ try {
   await mkdir(path.join(root, 'docs/database/checks'), { recursive: true });
   await writeFile(path.join(root, 'docs/database/checks/api-roles-report.json'), JSON.stringify(report, null, 2) + '\n');
   const passed = report.checks.filter(c => c.result === 'passed').length;
-  console.log(`${report.result.toUpperCase()}: ${passed}/${report.checks.length} проверок`);
+  console.log(`${report.result.toUpperCase()}: ${passed}/${report.checks.length} РїСЂРѕРІРµСЂРѕРє`);
   process.exitCode = report.result === 'passed' ? 0 : 1;
 }
+

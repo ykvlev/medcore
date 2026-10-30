@@ -11,6 +11,10 @@ RUN dotnet publish backend/Medcore.Api/Medcore.Api.csproj -c Release -o /app --n
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
+# Кириллица в PDF: DejaVuSans встраивается в отчёт (в образе шрифтов нет).
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app .
 # Порт задаёт хостинг (Render передаёт PORT); локально приложение слушает 5180.
 ENV ASPNETCORE_ENVIRONMENT=Production
