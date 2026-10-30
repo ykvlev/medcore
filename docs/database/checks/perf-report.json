@@ -1,0 +1,400 @@
+{
+  "generatedAt": "2026-10-30T19:15:25.370Z",
+  "api": "http://127.0.0.1:5180",
+  "plan": {
+    "goal": {
+      "dashboardP50Ms": 700,
+      "listP50Ms": 600
+    },
+    "network": {
+      "roundTripMs": 110,
+      "connectMs": 370,
+      "source": "условия задания; фактические значения зависят от канала до учебного PostgreSQL"
+    }
+  },
+  "runs": {
+    "before": {
+      "measuredAt": "2026-10-30T18:42:18.902Z",
+      "api": "http://127.0.0.1:5182",
+      "samplesPerEndpoint": 10,
+      "login": {
+        "doctor": 5337.6,
+        "manager": 898.9,
+        "note": "включая PBKDF2 210 000 итераций"
+      },
+      "endpoints": [
+        {
+          "key": "auth/me",
+          "path": "/api/auth/me",
+          "user": "doctor",
+          "targetMs": null,
+          "targetMet": null,
+          "avgBytes": 273,
+          "contentEncoding": null,
+          "count": 10,
+          "p50": 491.7,
+          "p95": 714.6,
+          "min": 429.7,
+          "max": 714.6,
+          "mean": 534.6
+        },
+        {
+          "key": "dashboard/summary",
+          "path": "/api/dashboard/summary",
+          "user": "doctor",
+          "targetMs": 700,
+          "targetMet": false,
+          "avgBytes": 1933,
+          "contentEncoding": null,
+          "count": 10,
+          "p50": 1309.8,
+          "p95": 1782.8,
+          "min": 1210.7,
+          "max": 1782.8,
+          "mean": 1413.5
+        },
+        {
+          "key": "patients?page=1",
+          "path": "/api/patients?page=1",
+          "user": "doctor",
+          "targetMs": 600,
+          "targetMet": false,
+          "avgBytes": 8626,
+          "contentEncoding": null,
+          "count": 10,
+          "p50": 1120.1,
+          "p95": 1448.9,
+          "min": 778.2,
+          "max": 1448.9,
+          "mean": 1142.6
+        },
+        {
+          "key": "organizations?page=1",
+          "path": "/api/organizations?page=1",
+          "user": "manager",
+          "targetMs": 600,
+          "targetMet": false,
+          "avgBytes": 648,
+          "contentEncoding": null,
+          "count": 10,
+          "p50": 915.7,
+          "p95": 1332.5,
+          "min": 689.7,
+          "max": 1332.5,
+          "mean": 965.8
+        },
+        {
+          "key": "reports/occupancy",
+          "path": "/api/reports/occupancy",
+          "user": "manager",
+          "targetMs": 600,
+          "targetMet": false,
+          "avgBytes": 2228,
+          "contentEncoding": null,
+          "count": 10,
+          "p50": 964.1,
+          "p95": 1222.7,
+          "min": 574.4,
+          "max": 1222.7,
+          "mean": 948.7
+        },
+        {
+          "key": "diagnoses?search=гип",
+          "path": "/api/diagnoses?search=%D0%B3%D0%B8%D0%BF",
+          "user": "doctor",
+          "targetMs": 600,
+          "targetMet": true,
+          "avgBytes": 326,
+          "contentEncoding": null,
+          "count": 10,
+          "p50": 591.9,
+          "p95": 848.2,
+          "min": 513.9,
+          "max": 848.2,
+          "mean": 627
+        }
+      ],
+      "notes": [
+        "Каждый замер включает полный HTTP-цикл: соединение, аутентификацию, SQL и передачу тела ответа.",
+        "Перед серией каждый эндпоинт вызывается один раз для прогрева JIT и пула соединений; эти вызовы не входят в статистику.",
+        "doctor: /auth/me, /dashboard/summary, /patients, /diagnoses; manager: /organizations, /reports/occupancy.",
+        "p50/p95 — ближайший ранг по 10 замерам."
+      ],
+      "compression": {
+        "path": "/api/dashboard/summary",
+        "plainBytes": 1933,
+        "compressedBytes": 1933,
+        "contentEncoding": null,
+        "ratio": 1
+      }
+    },
+    "after": {
+      "measuredAt": "2026-10-30T19:15:11.274Z",
+      "api": "http://127.0.0.1:5180",
+      "samplesPerEndpoint": 10,
+      "login": {
+        "doctor": 888.1,
+        "manager": 645.6,
+        "note": "включая PBKDF2 210 000 итераций"
+      },
+      "endpoints": [
+        {
+          "key": "auth/me",
+          "path": "/api/auth/me",
+          "user": "doctor",
+          "targetMs": null,
+          "targetMet": null,
+          "avgBytes": 273,
+          "contentEncoding": "gzip",
+          "samples": [
+            3,
+            3.1,
+            3.1,
+            2.4,
+            2.8,
+            2.2,
+            3,
+            2.2,
+            3.4,
+            2.5
+          ],
+          "count": 10,
+          "p50": 2.8,
+          "p95": 3.4,
+          "min": 2.2,
+          "max": 3.4,
+          "mean": 2.7
+        },
+        {
+          "key": "dashboard/summary",
+          "path": "/api/dashboard/summary",
+          "user": "doctor",
+          "targetMs": 700,
+          "targetMet": true,
+          "avgBytes": 1927,
+          "contentEncoding": "gzip",
+          "samples": [
+            117.3,
+            376.7,
+            150.3,
+            382.2,
+            110.3,
+            488.7,
+            113.3,
+            806.3,
+            107,
+            335.1
+          ],
+          "count": 10,
+          "p50": 150.3,
+          "p95": 806.3,
+          "min": 107,
+          "max": 806.3,
+          "mean": 298.7
+        },
+        {
+          "key": "patients?page=1",
+          "path": "/api/patients?page=1",
+          "user": "doctor",
+          "targetMs": 600,
+          "targetMet": true,
+          "avgBytes": 8626,
+          "contentEncoding": "gzip",
+          "samples": [
+            115.6,
+            411,
+            113.2,
+            380.9,
+            115,
+            370.3,
+            112.9,
+            373.3,
+            116.9,
+            414
+          ],
+          "count": 10,
+          "p50": 116.9,
+          "p95": 414,
+          "min": 112.9,
+          "max": 414,
+          "mean": 252.3
+        },
+        {
+          "key": "organizations?page=1",
+          "path": "/api/organizations?page=1",
+          "user": "manager",
+          "targetMs": 600,
+          "targetMet": true,
+          "avgBytes": 648,
+          "contentEncoding": "gzip",
+          "samples": [
+            86,
+            544.9,
+            87.4,
+            179.5,
+            86.1,
+            171.5,
+            89,
+            254.6,
+            86.7,
+            184.5
+          ],
+          "count": 10,
+          "p50": 89,
+          "p95": 544.9,
+          "min": 86,
+          "max": 544.9,
+          "mean": 177
+        },
+        {
+          "key": "reports/occupancy",
+          "path": "/api/reports/occupancy",
+          "user": "manager",
+          "targetMs": 600,
+          "targetMet": true,
+          "avgBytes": 2228,
+          "contentEncoding": "gzip",
+          "samples": [
+            100.6,
+            201.5,
+            87.9,
+            198.7,
+            91.1,
+            198.3,
+            88.9,
+            203.4,
+            90.6,
+            247
+          ],
+          "count": 10,
+          "p50": 100.6,
+          "p95": 247,
+          "min": 87.9,
+          "max": 247,
+          "mean": 150.8
+        },
+        {
+          "key": "diagnoses?search=гип",
+          "path": "/api/diagnoses?search=%D0%B3%D0%B8%D0%BF",
+          "user": "doctor",
+          "targetMs": 600,
+          "targetMet": true,
+          "avgBytes": 326,
+          "contentEncoding": "gzip",
+          "samples": [
+            87,
+            179.4,
+            88.7,
+            190.5,
+            87.3,
+            180.8,
+            91.2,
+            179.8,
+            85.6,
+            183.8
+          ],
+          "count": 10,
+          "p50": 91.2,
+          "p95": 190.5,
+          "min": 85.6,
+          "max": 190.5,
+          "mean": 135.4
+        }
+      ],
+      "notes": [
+        "Каждый замер включает полный HTTP-цикл: соединение, аутентификацию, SQL и передачу тела ответа.",
+        "Перед серией каждый эндпоинт вызывается один раз для прогрева JIT и пула соединений; эти вызовы не входят в статистику.",
+        "doctor: /auth/me, /dashboard/summary, /patients, /diagnoses; manager: /organizations, /reports/occupancy.",
+        "p50/p95 — ближайший ранг по 10 замерам."
+      ],
+      "compression": {
+        "path": "/api/dashboard/summary",
+        "plainBytes": 1927,
+        "gzip": {
+          "bytes": 611,
+          "contentEncoding": "gzip"
+        },
+        "brotli": {
+          "bytes": 553,
+          "contentEncoding": "br"
+        },
+        "gzipRatio": 0.3,
+        "brotliRatio": 0.3
+      }
+    }
+  },
+  "comparison": {
+    "before": "старый код на отдельном экземпляре 127.0.0.1:5182 до правок",
+    "after": "основной экземпляр 127.0.0.1:5180 после пересборки финального кода",
+    "note": "Сеть и учебный PostgreSQL одни и те же; before и after сняты одним и тем же tools/perf-check.mjs."
+  },
+  "changes": [
+    "SessionAsync + AccessAsync: users → employees → roles → scopes слиты в один SQL с json_agg; аутентификация стоит 1 round-trip вместо 5.",
+    "IMemoryCache: UserAccess кешируется по SHA-256 хешу токена; sliding 45 с, absolute 60 с; запись удаляется в LogoutAsync, поэтому старый cookie отклоняется сразу после выхода.",
+    "NpgsqlBatch: дашборд (8 независимых SELECT), count+страница организаций, обзор отчётов, 8 справочников, count+страница пациентов и карточка+история+аудит выполняются одним round-trip.",
+    "Пациенты: COUNT и страница одним batch; проекция списка и карточки переписана на LATERAL (поликлиника, последний случай, последний приём) без шести копий условия области.",
+    "Аудит чтения карточки сохранён, но пишется в том же batch через INSERT … SELECT WHERE EXISTS: для недоступного пациента запись не создаётся.",
+    "ResponseCompression: brotli/gzip для application/json и application/problem+json; уровень Fastest. Content-Encoding проверен curl: dashboard 1927 → gzip 611 / br 553 байт.",
+    "Frontend QueryClient: staleTime 60 000, gcTime 600 000, retry 1, refetchOnWindowFocus false; справочники живут 10 минут; для списков уже используется placeholderData: keepPreviousData.",
+    "tools/check-api.mjs теперь читает MEDCORE_API_URL (по умолчанию остаётся http://127.0.0.1:5180) — это позволило прогнать проверки на отдельном экземпляре."
+  ],
+  "indexes": {
+    "added": [],
+    "migration": "006 не создавалась: схема БД не менялась",
+    "evidence": "EXPLAIN ANALYZE на учебной БД: COUNT по пациентам 2,2 мс, страница 4,2 мс; Seq Scan по project.patients (1000 строк) и medical_cases (2000 строк) — оптимальный план при таких объёмах. Наблюдаемые 500–1100 мс — сетевой round-trip, а не работа SQL, поэтому дополнительные индексы не дали бы эффекта."
+  },
+  "supplementary": {
+    "patientCard": {
+      "path": "/api/patients/216",
+      "user": "doctor",
+      "samples": 10,
+      "before": {
+        "p50": 669.1,
+        "p95": 2232.2,
+        "api": "http://127.0.0.1:5180 (старый EF-вариант)"
+      },
+      "after": {
+        "p50": 144.1,
+        "p95": 168.1,
+        "api": "http://127.0.0.1:5180 (финальный код)"
+      },
+      "note": "Отдельный прогон tmp/measure-patients.mjs; карточка не входит в шесть основных эндпоинтов. После правки — один batch: карточка + история + аудит."
+    },
+    "patientsListStable": {
+      "path": "/api/patients?page=1",
+      "user": "doctor",
+      "samples": 10,
+      "p50": 154.5,
+      "p95": 171.1,
+      "api": "http://127.0.0.1:5180",
+      "note": "Повторный прогон в спокойном окне; в отчёте above приведён прогон perf-check с p95 414 мс — разброс объясняется задержкой учебной сети."
+    }
+  },
+  "verification": {
+    "check-api.mjs": {
+      "command": "node tools/check-api.mjs",
+      "api": "http://127.0.0.1:5180",
+      "result": "passed",
+      "checks": 33
+    },
+    "check-api-stage2.mjs": {
+      "command": "node tools/check-api-stage2.mjs",
+      "api": "http://127.0.0.1:5180",
+      "result": "passed",
+      "checks": 37
+    },
+    "build": "dotnet build backend/Medcore.Api/Medcore.Api.csproj --artifacts-path tmp\\build-perf — 0 предупреждений, 0 ошибок",
+    "frontend": "tsc -b --pretty false — без ошибок",
+    "equivalence": "Побайтное сравнение JSON старого и нового экземпляра: /auth/me, все роли dashboard, /patients (page 1/2, поиск), /patients/216, /patients/216/cases, /organizations, /reports/occupancy, /reports/overview, /dictionaries, /laboratories — совпадают (кроме traceId в 404)."
+  },
+  "targets": {
+    "dashboardP50Ms": 700,
+    "listP50Ms": 600,
+    "dashboard": "150,3 мс p50 (цель < 700)",
+    "patients": "116,9 мс p50 (цель < 600)",
+    "organizations": "89,0 мс p50",
+    "reports": "100,6 мс p50",
+    "diagnoses": "91,2 мс p50",
+    "caveat": "p95 на 5180 достигает 800 мс из-за неравномерной задержки учебного PostgreSQL; p50 стабильно ниже целей. Это предел сети, а не SQL."
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "checkedAt": "2026-10-30T19:15:34.423Z",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "API health responds",
+      "result": "passed"
+    },
+    {
+      "name": "anonymous session is rejected",
+      "result": "passed"
+    },
+    {
+      "name": "incorrect password is rejected",
+      "result": "passed"
+    },
+    {
+      "name": "registrar: real login creates session cookie",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "session resolves the registrar role",
+      "result": "passed"
+    },
+    {
+      "name": "patients come from the scoped paginated API",
+      "result": "passed"
+    },
+    {
+      "name": "registrar has an active authorized polyclinic",
+      "result": "passed"
+    },
+    {
+      "name": "TC-01 API: patient registration succeeds",
+      "result": "passed",
+      "status": 201
+    },
+    {
+      "name": "new patient is readable after registration",
+      "result": "passed"
+    },
+    {
+      "name": "TC-03 API: search finds the registered patient",
+      "result": "passed"
+    },
+    {
+      "name": "TC-02 API: authorized contacts update succeeds",
+      "result": "passed"
+    },
+    {
+      "name": "contact update is persisted with a new version",
+      "result": "passed"
+    },
+    {
+      "name": "stale patient version is rejected",
+      "result": "passed"
+    },
+    {
+      "name": "TC-05 API: registrar cannot create a diagnosis",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "patient change is verified directly in PostgreSQL",
+      "result": "passed"
+    },
+    {
+      "name": "patient creation and update have actor-attributed audit entries",
+      "result": "passed"
+    },
+    {
+      "name": "admin: real login creates session cookie",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "admin: permitted read succeeds",
+      "result": "passed"
+    },
+    {
+      "name": "admin: personal patient list is denied",
+      "result": "passed"
+    },
+    {
+      "name": "manager: real login creates session cookie",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "manager: permitted read succeeds",
+      "result": "passed"
+    },
+    {
+      "name": "manager: personal patient list is denied",
+      "result": "passed"
+    },
+    {
+      "name": "analyst: real login creates session cookie",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "analyst: permitted read succeeds",
+      "result": "passed"
+    },
+    {
+      "name": "analyst: personal patient list is denied",
+      "result": "passed"
+    },
+    {
+      "name": "lab: real login creates session cookie",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "lab: permitted read succeeds",
+      "result": "passed"
+    },
+    {
+      "name": "lab: personal patient list is denied",
+      "result": "passed"
+    },
+    {
+      "name": "doctor: real login creates session cookie",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "doctor can read patients within care relationships",
+      "result": "passed"
+    },
+    {
+      "name": "doctor cannot use the registrar contact-edit permission",
+      "result": "passed"
+    },
+    {
+      "name": "logout succeeds",
+      "result": "passed"
+    },
+    {
+      "name": "old session cookie is rejected after logout",
+      "result": "passed"
+    }
+  ],
+  "cleanup": "passed",
+  "limitations": [
+    "HTTP API checks; browser interaction is checked separately.",
+    "Hospitalization write operations and full coursework acceptance are not covered."
+  ]
+}

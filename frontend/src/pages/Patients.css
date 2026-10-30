@@ -1,0 +1,91 @@
+/* История болезни и справочник МКБ-10 в карточке пациента. */
+.history-heading-actions { display: flex; align-items: center; gap: 10px; }
+.history-heading-actions .button { min-height: 32px; padding: 7px 11px; font-size: 10px; }
+
+.history-filters { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px; }
+.history-filter {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .075); background: rgba(13, 18, 24, .3);
+  color: #8999ac; font-size: 10px; line-height: 1.4; transition: background .18s, border-color .18s, color .18s;
+}
+.history-filter:hover { color: #d3e0ec; background: rgba(255, 255, 255, .045); }
+.history-filter.selected { color: #d5e9e3; border-color: rgba(91, 214, 177, .22); background: rgba(91, 214, 177, .075); }
+.history-filter-count {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px;
+  padding: 0 5px; border-radius: 6px; font-size: 9px; color: #9fb3c6; background: rgba(255, 255, 255, .055);
+}
+.history-filter.selected .history-filter-count { color: #a9e4d3; background: rgba(91, 214, 177, .14); }
+
+.history-timeline { margin-top: 27px; }
+.history-event-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.history-event-meta time { font-size: 8px; color: #7d94a9; }
+.history-type {
+  display: inline-flex; align-items: center; padding: 3px 7px; border-radius: 5px;
+  font-size: 8px; letter-spacing: .3px; border: 1px solid rgba(255, 255, 255, .07);
+  background: rgba(255, 255, 255, .035); color: #96a8ba;
+}
+.history-type-diagnosis { color: #9ee0cb; border-color: rgba(91, 214, 177, .16); background: rgba(91, 214, 177, .07); }
+.history-type-record { color: #a9c2e8; border-color: rgba(108, 157, 255, .16); background: rgba(108, 157, 255, .07); }
+.history-type-hospitalization { color: #eccb9e; border-color: rgba(242, 182, 109, .16); background: rgba(242, 182, 109, .07); }
+.history-type-research { color: #c8b6ef; border-color: rgba(166, 138, 255, .16); background: rgba(166, 138, 255, .07); }
+.history-type-case { color: #9fc0d6; border-color: rgba(120, 176, 208, .16); background: rgba(120, 176, 208, .07); }
+
+.history-event h3 { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.history-event .history-point { color: #84baae; border-color: rgba(91, 214, 177, .11); background: #263c3e; }
+.history-event-record .history-point { color: #8faee0; border-color: rgba(108, 157, 255, .12); background: #26313e; }
+.history-event-hospitalization .history-point { color: #d6b184; border-color: rgba(242, 182, 109, .13); background: #3b3327; }
+.history-event-research .history-point { color: #b4a1e0; border-color: rgba(166, 138, 255, .13); background: #322c40; }
+.history-event-case .history-point { color: #98bed3; border-color: rgba(120, 176, 208, .14); background: #26333c; }
+.history-event-other .history-point { color: #9aa8b9; border-color: rgba(255, 255, 255, .08); background: #2b3139; }
+
+.icd-code {
+  display: inline-flex; align-items: center; justify-content: center; padding: 3px 7px; border-radius: 6px;
+  font-family: "Cascadia Mono", "Consolas", monospace; font-size: 10px; font-weight: 600; letter-spacing: .2px;
+  color: #a6e6d4; background: rgba(91, 214, 177, .09); border: 1px solid rgba(91, 214, 177, .18);
+  white-space: nowrap;
+}
+
+.diagnosis-search-field { max-width: none; width: 100%; }
+.diagnosis-options {
+  list-style: none; margin: 2px 0 0; padding: 5px; max-height: 230px; overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, .09); border-radius: 10px; background: rgba(20, 27, 35, .96);
+}
+.diagnosis-options li > button {
+  display: flex; align-items: center; gap: 9px; width: 100%; padding: 9px 8px; text-align: left;
+  border-radius: 7px; background: transparent; color: #c6d4e2; font-size: 11px; line-height: 1.45;
+}
+.diagnosis-options li > button:hover { background: rgba(255, 255, 255, .055); }
+.diagnosis-option-name { flex: 1; min-width: 0; }
+.diagnosis-options small { color: #7f91a5; font-size: 8.5px; white-space: nowrap; }
+.diagnosis-selected {
+  display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-radius: 10px;
+  border: 1px solid rgba(91, 214, 177, .16); background: rgba(91, 214, 177, .055);
+}
+.diagnosis-selected > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.diagnosis-selected strong { font-size: 11.5px; font-weight: 500; color: #d4e7df; line-height: 1.5; }
+.diagnosis-selected small { font-size: 8.5px; color: #82a99e; }
+.diagnosis-selected .icon-button { margin-left: auto; }
+
+.field textarea {
+  width: 100%; min-height: 78px; padding: 10px 12px; resize: vertical;
+  background: rgba(12, 19, 27, .32); border: 1px solid rgba(255, 255, 255, .1); border-radius: 9px;
+  color: #d4e1ed; font-size: 12px; line-height: 1.6; transition: background .15s, border-color .15s;
+}
+.field textarea::placeholder { color: #64758a; font-size: 11px; }
+.field textarea:focus { background: rgba(13, 22, 31, .5); border-color: rgba(108, 157, 255, .45); }
+
+.diagnosis-note-field { margin-top: 19px; }
+.diagnosis-form .form-section-next { margin-top: 25px; }
+.diagnosis-primary { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; color: #aebdcb; font-size: 11px; cursor: pointer; }
+.diagnosis-primary input { width: 15px; height: 15px; accent-color: #63c9ab; cursor: pointer; }
+.diagnosis-form .field-hint { line-height: 1.55; }
+.diagnosis-empty-case {
+  display: block; padding: 11px 12px; border-radius: 9px; border: 1px solid rgba(242, 182, 109, .2);
+  background: rgba(242, 182, 109, .06); color: #dcb98b; font-size: 10px; line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .history-filters { margin-top: 18px; }
+  .history-filter { padding: 6px 8px; font-size: 9px; }
+  .diagnosis-options small { display: none; }
+}

@@ -1,0 +1,20 @@
+.env
+!.env.example
+node_modules/
+bin/
+obj/
+dist/
+TestResults/
+.vs/
+.venv/
+__pycache__/
+tmp/
+.tools/
+LOCAL-ACCESS.md
+*.log
+backups/
+# Исходные материалы (стандарты, образцы, PDF) не публикуются в репозитории.
+materials/
+# Временные каталоги предпросмотра документов.
+.dsh-office-*/
+*.dump

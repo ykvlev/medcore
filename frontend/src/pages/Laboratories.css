@@ -1,0 +1,35 @@
+.lab-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+.lab-toolbar .search-field{max-width:420px}
+.lab-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:22px}
+.lab-card{padding:23px;display:flex;flex-direction:column;min-height:268px}
+.lab-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:21px}
+.lab-card .organization-icon{flex-shrink:0}
+.lab-card h2{font-size:15px;font-weight:500;line-height:1.5;color:#dce6f0;letter-spacing:-.1px}
+.lab-card .profile-tags{margin-top:12px}
+.lab-card-empty{margin-top:12px;font-size:9px;color:#73869a}
+.lab-card .organization-contacts{margin-top:18px;margin-bottom:0}
+.lab-orders-panel{overflow:hidden}
+.lab-orders-panel>.panel-heading{padding:22px 23px 16px;border-bottom:1px solid rgba(255,255,255,.05)}
+.lab-orders-panel>.table-toolbar{padding-top:16px;padding-bottom:16px}
+.lab-form .form-grid{gap:18px}
+.lab-form-note{display:flex;flex-direction:column;gap:5px;margin-bottom:22px;padding:13px 15px;border-radius:11px;border:1px solid rgba(166,138,255,.11);background:rgba(166,138,255,.04)}
+.lab-form-note strong{font-size:12px;font-weight:500;color:#d8d1ec}
+.lab-form-note span{font-size:9.5px;color:#9a91b4;line-height:1.7}
+.lab-form-note-block{margin-top:18px;margin-bottom:24px;font-size:10px;line-height:1.75;color:#9a91b4}
+.lab-form .field textarea{width:100%;padding:10px 12px;background:rgba(12,19,27,.32);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:#d4e1ed;font-size:12px;line-height:1.65;resize:vertical;min-height:76px;transition:background .15s,border-color .15s}
+.lab-form .field textarea:focus{background:rgba(13,22,31,.5);border-color:rgba(108,157,255,.45);outline:none}
+.lab-form .field textarea::placeholder{color:#64758a}
+.lab-detail-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.lab-detail-number{font-size:9px;color:#7e90a4}
+.lab-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:0 0 22px;padding:15px 17px;border:1px solid rgba(255,255,255,.055);border-radius:12px;background:rgba(13,19,26,.32)}
+.lab-facts dt{font-size:8px;text-transform:uppercase;letter-spacing:1.1px;color:#71859b;margin-bottom:7px}
+.lab-facts dd{margin:0;font-size:10.5px;line-height:1.6;color:#c4d3e2;word-break:break-word}
+.lab-result-section{padding:16px 17px;border:1px solid rgba(255,255,255,.055);border-radius:12px;background:rgba(14,21,29,.28)}
+.lab-result-section h3{margin:0 0 14px;font-size:10px;font-weight:500;color:#a8bccd}
+.lab-result-facts{grid-template-columns:1fr 1fr;margin:0;padding:0;border:0;background:transparent}
+.lab-empty-line{margin:0;font-size:10px;color:#75889c}
+.lab-detail-actions{display:flex;justify-content:flex-end;margin-top:21px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06)}
+.badge-pending{color:#e0bd88;border-color:rgba(242,182,109,.14);background:rgba(242,182,109,.06)}
+@media(max-width:1180px){.lab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:950px){.lab-facts{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.lab-grid{grid-template-columns:1fr}.lab-toolbar{align-items:stretch;flex-direction:column;gap:11px}.lab-toolbar .search-field{max-width:none}.lab-facts,.lab-result-facts{grid-template-columns:1fr}.lab-orders-panel>.panel-heading{padding:18px 16px 14px}}

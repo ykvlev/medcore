@@ -1,0 +1,124 @@
+{
+  "checkedAt": "2026-10-30T19:36:48.948Z",
+  "engine": "PGlite 0.3.14 (isolated embedded PostgreSQL, not a multi-user server)",
+  "migrations": [
+    {
+      "file": "001_initial_schema.sql",
+      "sha256": "1425f2dd74e7c6e1ec8633d1c1aed1085db5f982cfc756884fab39ef7f231fcd",
+      "result": "passed"
+    },
+    {
+      "file": "002_business_rules.sql",
+      "sha256": "84ffc6eee8a9c278664861e35bb90876af5dc5bea5475d59d4eca01ff16a8753",
+      "result": "passed"
+    },
+    {
+      "file": "003_stored_objects.sql",
+      "sha256": "e685fffd31b7104435076b8095302d552ceebcac7ba32a4614bf890e55e5d368",
+      "result": "passed"
+    },
+    {
+      "file": "004_roles_icd.sql",
+      "result": "skipped",
+      "reason": "нужны демонстрационные данные (администратор и больница); проверяется на учебном сервере по docs/database/checks/004_roles_icd.json",
+      "message": "Не найден демонстрационный администратор"
+    },
+    {
+      "file": "005_specialties.sql",
+      "sha256": "94d78810a278907b6682296a7f2f260848cb88e770d16b524653472b69513d36",
+      "result": "passed"
+    }
+  ],
+  "checks": [
+    {
+      "name": "schema created",
+      "result": "passed",
+      "tableCount": 48
+    },
+    {
+      "name": "Q01 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q02 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q03 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q04 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q05 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q06 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q07 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q08 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q09 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q10 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q11 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "Q12 compiles and executes on empty data",
+      "result": "passed"
+    },
+    {
+      "name": "patient insert with required fields",
+      "result": "passed"
+    },
+    {
+      "name": "nonpositive bed capacity rejected",
+      "result": "passed",
+      "expectedSqlState": "23514"
+    },
+    {
+      "name": "empty patient name rejected",
+      "result": "passed",
+      "expectedSqlState": "23514"
+    },
+    {
+      "name": "attachment to missing patient rejected",
+      "result": "passed",
+      "expectedSqlState": "23503"
+    },
+    {
+      "name": "unknown hospitalization status rejected",
+      "result": "passed",
+      "expectedSqlState": "22P02"
+    },
+    {
+      "name": "002_business_rules.sql",
+      "result": "passed"
+    },
+    {
+      "name": "003_stored_objects.sql",
+      "result": "passed"
+    }
+  ],
+  "limitations": [
+    "Network connections, PostgreSQL roles, concurrent sessions and production performance are not tested here."
+  ],
+  "postgresqlVersion": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+  "result": "passed"
+}

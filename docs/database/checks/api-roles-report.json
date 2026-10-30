@@ -1,0 +1,251 @@
+{
+  "checkedAt": "2026-10-30T19:13:02.524Z",
+  "api": "http://127.0.0.1:5180",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "admin: вход и роль system_admin",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "system_admin"
+      ]
+    },
+    {
+      "name": "manager: вход и роль organization_admin",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "organization_admin"
+      ]
+    },
+    {
+      "name": "chief: вход и роль chief_physician",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "chief_physician"
+      ]
+    },
+    {
+      "name": "deputy: вход и роль deputy_chief_physician",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "deputy_chief_physician"
+      ]
+    },
+    {
+      "name": "head: вход и роль head_of_department",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "head_of_department"
+      ]
+    },
+    {
+      "name": "doctor: вход и роль doctor",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "doctor"
+      ]
+    },
+    {
+      "name": "registrar: вход и роль registrar",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "registrar"
+      ]
+    },
+    {
+      "name": "lab: вход и роль lab_staff",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "lab_staff"
+      ]
+    },
+    {
+      "name": "analyst: вход и роль analyst",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "analyst"
+      ]
+    },
+    {
+      "name": "minister: вход и роль minister_of_health",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "minister_of_health"
+      ]
+    },
+    {
+      "name": "governor: вход и роль governor",
+      "result": "passed",
+      "status": 200,
+      "roles": [
+        "governor"
+      ]
+    },
+    {
+      "name": "system_admin: /api/admin/users → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "organization_admin: /api/reports/occupancy → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "chief_physician: /api/patients?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "chief_physician: /api/employees?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "chief_physician: /api/dashboard/summary → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "deputy_chief_physician: /api/patients?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "head_of_department: /api/patients?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "head_of_department: /api/reports/occupancy → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "doctor: /api/diagnoses?search=I10 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "registrar: /api/patients?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "lab_staff: /api/lab-orders?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "analyst: /api/reports/occupancy → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "minister_of_health: /api/reports/occupancy → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "minister_of_health: /api/organizations?page=1 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "governor: /api/reports/hospitalizations → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "minister_of_health: /api/patients?page=1 → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "minister_of_health: /api/patients/216 → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "governor: /api/patients?page=1 → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "governor: /api/patients/216/cases → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "head_of_department: /api/diagnoses?search=I10 → 200",
+      "result": "passed",
+      "status": 200
+    },
+    {
+      "name": "analyst: /api/patients?page=1 → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "lab_staff: /api/patients?page=1 → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "system_admin: /api/patients?page=1 → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "registrar: /api/admin/users → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "doctor: /api/admin/users → 403",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "deputy_chief_physician: изменение структуры запрещено",
+      "result": "passed",
+      "status": 403
+    },
+    {
+      "name": "minister_of_health: все 13 организаций",
+      "result": "passed",
+      "total": 13
+    },
+    {
+      "name": "chief_physician: только своя больница",
+      "result": "passed",
+      "total": 1
+    },
+    {
+      "name": "МКБ-10: поиск по названию находит I10 с главой",
+      "result": "passed",
+      "items": 1
+    },
+    {
+      "name": "chief_physician: случаи лечения доступны",
+      "result": "passed",
+      "cases": 1
+    },
+    {
+      "name": "карточка пациента: история содержит диагноз с кодом МКБ",
+      "result": "passed",
+      "history": 2
+    }
+  ],
+  "failed": []
+}

@@ -1,0 +1,92 @@
+{
+  "runId": "8bd48935-afdf-4a8a-9088-d4c0cf220b23",
+  "startedAt": "2026-10-30T12:38:45.136Z",
+  "schema": "project",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "connection identity and deployed business-rule objects match the intended environment",
+      "result": "passed"
+    },
+    {
+      "name": "both writers use READ COMMITTED",
+      "result": "passed"
+    },
+    {
+      "name": "session B cannot see the uncommitted employment of session A",
+      "result": "passed"
+    },
+    {
+      "name": "session B is observed waiting on the business advisory lock",
+      "result": "passed"
+    },
+    {
+      "name": "session A commits its employment",
+      "result": "passed"
+    },
+    {
+      "name": "session B continues its INSERT after session A releases the lock",
+      "result": "passed"
+    },
+    {
+      "name": "session B commit rejects conflicting employment using the fresh committed state",
+      "result": "passed",
+      "expectedSqlState": "23514",
+      "actualSqlState": "23514"
+    },
+    {
+      "name": "only the employment committed by session A remains",
+      "result": "passed"
+    },
+    {
+      "name": "negative isolation test actually uses REPEATABLE READ",
+      "result": "passed"
+    },
+    {
+      "name": "governed write under REPEATABLE READ is rejected explicitly",
+      "result": "passed",
+      "expectedSqlState": "25000",
+      "actualSqlState": "25000"
+    },
+    {
+      "name": "business-rule queue has no committed residual requests",
+      "result": "passed"
+    },
+    {
+      "name": "all committed personal fixture rows are removed",
+      "result": "passed"
+    }
+  ],
+  "fixture": {
+    "committed": true,
+    "employeeId": "3",
+    "hospitalIds": [
+      "6",
+      "7"
+    ],
+    "employmentIds": [
+      "6",
+      "7"
+    ],
+    "referenceRowsCreated": {
+      "employee_categories": "3",
+      "academic_degrees": "3",
+      "academic_titles": "4"
+    }
+  },
+  "cleanup": {
+    "result": "passed",
+    "retainedReferenceRows": []
+  },
+  "limitations": [
+    "Exercises one conflicting pair of employment transactions, not a load test.",
+    "Does not test application authorization or the privileges of a restricted API role.",
+    "Two independent server sessions are used; schema owners can still disable their own triggers.",
+    "A killed process or lost connection can require manual cleanup by the recorded fixture IDs."
+  ],
+  "serverVersion": "18.0",
+  "transport": "SSL disabled for this educational server",
+  "businessRulesFileSha256": "84ffc6eee8a9c278664861e35bb90876af5dc5bea5475d59d4eca01ff16a8753",
+  "observedWaitMilliseconds": 1267,
+  "finishedAt": "2026-10-30T12:39:17.146Z"
+}

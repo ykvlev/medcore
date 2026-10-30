@@ -1,0 +1,14 @@
+.dash-dock{position:fixed;left:calc(50% + 46px);bottom:22px;z-index:30;transform:translateX(-50%);display:flex;justify-content:center;pointer-events:none}
+.dash-dock-surface{pointer-events:auto;display:flex;align-items:center;gap:4px;padding:7px;border-radius:22px;background:linear-gradient(158deg,rgba(20,30,40,.42) 0%,rgba(20,30,40,.3) 58%,rgba(16,26,36,.4) 100%);border:1px solid rgba(190,228,246,.16);border-top-color:rgba(214,244,255,.24);box-shadow:0 18px 44px rgba(2,8,18,.5),0 2px 8px rgba(2,8,18,.25),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
+.dash-dock-link{position:relative;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:16px;color:#b6ccdc;transition:background .18s,color .18s,box-shadow .18s}
+.dash-dock-link:hover{color:#effaf6;background:rgba(120,220,190,.1);box-shadow:inset 0 0 0 1px rgba(150,235,210,.16)}
+.dash-dock-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.dash-dock-icon{display:flex;align-items:center;justify-content:center;transition:transform .18s}
+.dash-dock-link:hover .dash-dock-icon{transform:translateY(-1px)}
+.dash-dock-label{position:absolute;bottom:calc(100% + 14px);left:50%;padding:6px 10px;border-radius:9px;background:rgba(8,17,26,.94);border:1px solid rgba(190,228,246,.18);box-shadow:0 10px 24px rgba(0,0,0,.4);color:#e6f3fa;font-size:10.5px;letter-spacing:.2px;white-space:nowrap;opacity:0;transform:translate(-50%,6px);transition:opacity .16s,transform .16s;pointer-events:none}
+.dash-dock-link:hover .dash-dock-label,.dash-dock-link:focus-visible .dash-dock-label{opacity:1;transform:translate(-50%,0)}
+.dash-dock-label::after{content:"";position:absolute;left:50%;bottom:-4px;width:7px;height:7px;transform:translateX(-50%) rotate(45deg);background:rgba(8,17,26,.94);border-right:1px solid rgba(190,228,246,.18);border-bottom:1px solid rgba(190,228,246,.18)}
+@media(max-width:950px){.dash-dock{left:calc(50% + 39px)}}
+@media(max-width:700px){.dash-dock{bottom:14px}.dash-dock-surface{padding:6px;gap:2px;border-radius:19px}.dash-dock-link{width:46px;height:46px;border-radius:13px}.dash-dock-label{font-size:10px;bottom:calc(100% + 11px)}}
+@media(max-width:440px){.dash-dock{left:calc(50% + 33px)}}
+@media(prefers-reduced-motion:reduce){.dash-dock-link,.dash-dock-icon,.dash-dock-label{transition:none}.dash-dock-link:hover .dash-dock-icon{transform:none}}

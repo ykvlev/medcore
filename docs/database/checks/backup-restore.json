@@ -1,0 +1,358 @@
+{
+  "checkedAt": "2026-10-30T16:07:01.371Z",
+  "result": "passed-with-environment-limitation",
+  "purpose": "Фактическая проверка резервного копирования MEDCORE и восстановления в отдельную тестовую БД",
+  "restorePerformed": true,
+  "restorePerformedOnEducationalServer": false,
+  "summary": {
+    "backup": {
+      "created": true,
+      "file": "backups/medcore_project_only_20261030T155650Z.dump",
+      "bytes": 381634,
+      "sha256": "9d09149d6b6c481f440c1c53ea734ffb113860529234ac689ef28dad000fb515",
+      "integrity": "verified",
+      "schemas": [
+        "project"
+      ],
+      "postgresVersion": "18.0",
+      "pgDumpVersion": "pg_dump (PostgreSQL) 18.6",
+      "pgDumpOnPath": false,
+      "getCommandPgDump": "не найдено в PATH; использован стандартный путь установки",
+      "pgDumpPath": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe",
+      "objects": {
+        "tables": 48,
+        "views": 3,
+        "procedures": 4,
+        "functions": 11
+      },
+      "toc": {
+        "readable": true,
+        "entries": 534,
+        "tableDataEntries": 48
+      }
+    },
+    "educationalServer": {
+      "database": "db_a_s_yakovlev",
+      "restoreResult": "blocked",
+      "reason": "Роль БД не имеет права CREATE DATABASE (SQLSTATE 42501), поэтому отдельную тестовую БД \"medcore_restore_check\" создать нельзя. Требуется администратор сервера: CREATE DATABASE \"medcore_restore_check\"; после этого повторите восстановление с тем же --database.",
+      "sqlstate": "42501"
+    },
+    "isolatedRestore": {
+      "result": "passed",
+      "targetDatabase": "medcore_restore_check",
+      "databaseCreatedByScript": true,
+      "pgRestoreVersion": "pg_restore (PostgreSQL) 18.6",
+      "durationMs": 1339,
+      "exitCode": 0,
+      "clusterVersion": "18.6",
+      "keyTablesMatched": "10/10",
+      "viewsFound": "3/3",
+      "proceduresFound": "4/4",
+      "objects": {
+        "tables": 48,
+        "views": 3,
+        "procedures": 4,
+        "functions": 11
+      },
+      "extensions": [
+        "btree_gist",
+        "pg_trgm"
+      ]
+    }
+  },
+  "educationalServer": {
+    "checkedAt": "2026-10-30T16:05:20.126Z",
+    "result": "blocked",
+    "purpose": "Проверка резервного копирования и восстановления MEDCORE в отдельную тестовую БД",
+    "safety": {
+      "targetDatabase": "medcore_restore_check",
+      "allowCreate": true,
+      "workingDatabase": "db_a_s_yakovlev",
+      "targetNameValid": true,
+      "targetIsWorkingDatabase": false,
+      "targetExisted": false
+    },
+    "environment": {
+      "pgDump": {
+        "available": true,
+        "onPath": false,
+        "foundVia": "standard-install-path",
+        "path": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe",
+        "version": "pg_dump (PostgreSQL) 18.6"
+      },
+      "pgRestore": {
+        "available": true,
+        "onPath": false,
+        "path": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_restore.exe",
+        "version": "pg_restore (PostgreSQL) 18.6"
+      },
+      "workingServer": {
+        "database": "db_a_s_yakovlev",
+        "username": "a-s-yakovlev",
+        "version": "18.0",
+        "ssl": false,
+        "canCreateDatabase": false,
+        "isSuperuser": false
+      }
+    },
+    "backup": {
+      "file": "backups/medcore_project_only_20261030T155650Z.dump",
+      "bytes": 381634,
+      "manifest": "backups/medcore_project_only_20261030T155650Z.manifest.json",
+      "sha256": "9d09149d6b6c481f440c1c53ea734ffb113860529234ac689ef28dad000fb515",
+      "integrity": "verified",
+      "createdAt": "2026-10-30T15:57:49.815Z",
+      "schemas": [
+        "project"
+      ],
+      "postgresVersion": "18.0",
+      "pgDumpVersion": "pg_dump (PostgreSQL) 18.6",
+      "pgDumpOnPath": false,
+      "pgDumpPath": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe",
+      "objects": {
+        "tables": 48,
+        "views": 3,
+        "procedures": 4,
+        "functions": 11
+      },
+      "keyTableRows": {
+        "medical_organizations": 13,
+        "departments": 30,
+        "beds": 300,
+        "employees": 200,
+        "doctors": 120,
+        "patients": 1000,
+        "medical_cases": 2000,
+        "appointments": 1500,
+        "hospitalizations": 500,
+        "bed_occupancies": 500
+      },
+      "toc": {
+        "readable": true,
+        "entries": 534,
+        "tableDataEntries": 48
+      }
+    },
+    "restore": {
+      "attempted": false,
+      "databaseCreatedByScript": false
+    },
+    "verification": null,
+    "limitations": [
+      "Восстановление в тестовую БД не выполнялось, поэтому сверка строк, представлений и процедур после восстановления отсутствует.",
+      "Проверены целостность копии по SHA-256 и читаемость архива pg_restore; применение SQL к серверу не проверено.",
+      "Ограничение среды: отдельная тестовая БД не создана (нет права CREATEDB либо не указан --create)."
+    ],
+    "errors": [
+      "Роль БД не имеет права CREATE DATABASE (SQLSTATE 42501), поэтому отдельную тестовую БД \"medcore_restore_check\" создать нельзя. Требуется администратор сервера: CREATE DATABASE \"medcore_restore_check\"; после этого повторите восстановление с тем же --database."
+    ],
+    "finishedAt": "2026-10-30T16:05:24.865Z"
+  },
+  "isolatedLocalRestore": {
+    "checkedAt": "2026-10-30T16:05:13.470Z",
+    "result": "passed",
+    "purpose": "Проверка резервного копирования и восстановления MEDCORE в отдельную тестовую БД",
+    "safety": {
+      "targetDatabase": "medcore_restore_check",
+      "allowCreate": true,
+      "workingDatabase": "postgres",
+      "targetNameValid": true,
+      "targetIsWorkingDatabase": false,
+      "targetExisted": false,
+      "existingObjects": []
+    },
+    "environment": {
+      "pgDump": {
+        "available": true,
+        "onPath": false,
+        "foundVia": "standard-install-path",
+        "path": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe",
+        "version": "pg_dump (PostgreSQL) 18.6"
+      },
+      "pgRestore": {
+        "available": true,
+        "onPath": false,
+        "path": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_restore.exe",
+        "version": "pg_restore (PostgreSQL) 18.6"
+      },
+      "workingServer": {
+        "database": "postgres",
+        "username": "medcore_check",
+        "version": "18.6",
+        "ssl": false,
+        "canCreateDatabase": true,
+        "isSuperuser": true
+      }
+    },
+    "backup": {
+      "file": "backups/medcore_project_only_20261030T155650Z.dump",
+      "bytes": 381634,
+      "manifest": "backups/medcore_project_only_20261030T155650Z.manifest.json",
+      "sha256": "9d09149d6b6c481f440c1c53ea734ffb113860529234ac689ef28dad000fb515",
+      "integrity": "verified",
+      "createdAt": "2026-10-30T15:57:49.815Z",
+      "schemas": [
+        "project"
+      ],
+      "postgresVersion": "18.0",
+      "pgDumpVersion": "pg_dump (PostgreSQL) 18.6",
+      "pgDumpOnPath": false,
+      "pgDumpPath": "C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe",
+      "objects": {
+        "tables": 48,
+        "views": 3,
+        "procedures": 4,
+        "functions": 11
+      },
+      "keyTableRows": {
+        "medical_organizations": 13,
+        "departments": 30,
+        "beds": 300,
+        "employees": 200,
+        "doctors": 120,
+        "patients": 1000,
+        "medical_cases": 2000,
+        "appointments": 1500,
+        "hospitalizations": 500,
+        "bed_occupancies": 500
+      },
+      "toc": {
+        "readable": true,
+        "entries": 534,
+        "tableDataEntries": 48
+      }
+    },
+    "restore": {
+      "attempted": true,
+      "databaseCreatedByScript": true,
+      "targetDatabase": "medcore_restore_check",
+      "tool": "pg_restore (PostgreSQL) 18.6",
+      "durationMs": 1339,
+      "pgRestoreExitCode": 0,
+      "warnings": 0,
+      "warningSample": []
+    },
+    "verification": {
+      "errors": [],
+      "keyTables": [
+        {
+          "table": "medical_organizations",
+          "expected": 13,
+          "actual": 13,
+          "match": true
+        },
+        {
+          "table": "departments",
+          "expected": 30,
+          "actual": 30,
+          "match": true
+        },
+        {
+          "table": "beds",
+          "expected": 300,
+          "actual": 300,
+          "match": true
+        },
+        {
+          "table": "employees",
+          "expected": 200,
+          "actual": 200,
+          "match": true
+        },
+        {
+          "table": "doctors",
+          "expected": 120,
+          "actual": 120,
+          "match": true
+        },
+        {
+          "table": "patients",
+          "expected": 1000,
+          "actual": 1000,
+          "match": true
+        },
+        {
+          "table": "medical_cases",
+          "expected": 2000,
+          "actual": 2000,
+          "match": true
+        },
+        {
+          "table": "appointments",
+          "expected": 1500,
+          "actual": 1500,
+          "match": true
+        },
+        {
+          "table": "hospitalizations",
+          "expected": 500,
+          "actual": 500,
+          "match": true
+        },
+        {
+          "table": "bed_occupancies",
+          "expected": 500,
+          "actual": 500,
+          "match": true
+        }
+      ],
+      "views": [
+        {
+          "name": "vw_hospital_capacity",
+          "present": true
+        },
+        {
+          "name": "vw_doctor_statistics",
+          "present": true
+        },
+        {
+          "name": "vw_patient_treatment_summary",
+          "present": true
+        }
+      ],
+      "procedures": [
+        {
+          "name": "sp_register_patient",
+          "present": true
+        },
+        {
+          "name": "sp_update_patient",
+          "present": true
+        },
+        {
+          "name": "sp_delete_patient_draft",
+          "present": true
+        },
+        {
+          "name": "sp_get_patient_summary",
+          "present": true
+        }
+      ],
+      "objects": {
+        "tables": 48,
+        "views": 3,
+        "procedures": 4,
+        "functions": 11
+      },
+      "extensions": [
+        "btree_gist",
+        "pg_trgm"
+      ]
+    },
+    "limitations": [],
+    "errors": [],
+    "finishedAt": "2026-10-30T16:05:15.698Z"
+  },
+  "limitations": [
+    "На учебном сервере восстановление не выполнено: роль БД не имеет права CREATE DATABASE (SQLSTATE 42501). Отказ зафиксирован в разделе educationalServer.",
+    "Проверка восстановления выполнена в отдельном временном кластере PostgreSQL 18.6 на локальной машине, а не на учебном сервере. Результат подтверждает переносимость копии и работоспособность скриптов, но не является испытанием учебного сервера.",
+    "Временный кластер создан через initdb с локальной доверительной аутентификацией и суперпользователем medcore_check; это не модель промышленных прав БД.",
+    "Копия не зашифрована. SHA-256 подтверждает целостность файла, но не конфиденциальность; файл содержит учебные медицинские данные.",
+    "Автоматическое расписание копий, хранение вне машины, проверка восстановления на другом хосте и PITR/WAL не выполнялись.",
+    "Сетевой канал к учебному PostgreSQL не использует SSL (PGSSLMODE=disable, pg_stat_ssl ssl=false); копия передавалась по этому каналу.",
+    "Сверены количество строк в 10 ключевых таблицах, наличие 3 представлений, 4 процедур и общее число объектов (48 таблиц, 11 функций). Полная построчная сверка всех 48 таблиц не выполнялась.",
+    "Команда Get-Command pg_dump не находит программу в PATH. Установленный pg_dump 18.6 найден по стандартному пути и использован; в отчёте это отражено как pgDumpOnPath=false.",
+    "Локальный временный кластер и его данные удалены после проверки; файл копии остаётся в backups/ в открытом виде."
+  ],
+  "conclusion": "Копия схемы project создана, её целостность подтверждена по SHA-256, архив читается pg_restore. Восстановление в отдельную тестовую БД прошло проверку в изолированном кластере PostgreSQL 18.6: 10 из 10 ключевых таблиц, 3 представления, 4 процедуры, 48 таблиц. Создание отдельной БД на учебном сервере запрещено правами роли; это ограничение среды зафиксировано, скрипты готовы к запуску после создания БД администратором."
+}

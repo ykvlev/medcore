@@ -1,0 +1,24 @@
+{
+  "performedAt": "2026-10-30T12:52:44.704Z",
+  "mode": "apply",
+  "schema": "project",
+  "result": "passed",
+  "baseline": {
+    "patients": 1000,
+    "employees": 200,
+    "doctors": 120,
+    "cases": 2000,
+    "referrals": 500,
+    "users": 6
+  },
+  "plannedChanges": {
+    "sourceCaseClosureDates": 500,
+    "hospitalEmploymentsToMove": 2,
+    "clinicEmploymentsToAdd": 2
+  },
+  "appliedChanges": {
+    "sourceCaseClosureDates": 500,
+    "hospitalEmploymentsMoved": 2,
+    "clinicEmploymentsAdded": 2
+  }
+}

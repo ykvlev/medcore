@@ -1,0 +1,79 @@
+/* Персонал: реестр и карточка сотрудника. Дополняет styles.css, не меняя его. */
+
+/* --- Реестр -------------------------------------------------------- */
+.emp-toolbar-right{display:flex;align-items:center;gap:12px;margin-left:auto;min-width:0}
+.emp-filter{display:flex;align-items:center;gap:8px;min-height:37px;padding:0 11px;border:1px solid rgba(255,255,255,.075);border-radius:9px;background:rgba(13,18,24,.3)}
+.emp-filter label{font-size:9px;color:#7f92a5;white-space:nowrap}
+.emp-filter select{height:35px;min-width:132px;max-width:210px;border:0;background:transparent;color:#c3d2e2;font-size:10px;outline:none}
+.emp-filter select option{background:#222c36}
+.emp-filter:focus-within{border-color:rgba(108,157,255,.4)}
+.emp-filter-error{font-size:8.5px;color:#d99ba0;white-space:nowrap}
+.emp-name{display:flex;flex-direction:column;gap:5px;min-width:0}
+.emp-name small{font-size:8px;color:#708095}
+.emp-category{color:#a9bacb;font-size:10px}
+
+/* --- Карточка сотрудника ------------------------------------------ */
+.emp-card{display:flex;flex-direction:column;gap:16px}
+.emp-card-head{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid rgba(255,255,255,.055);border-radius:12px;background:rgba(255,255,255,.02)}
+.emp-card-head>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.emp-card-head strong{font-size:13px;font-weight:500;color:#e0e9f2;line-height:1.45}
+.emp-card-head>div>span{font-size:9.5px;color:#8498ac;line-height:1.5}
+.emp-card-head .badge{margin-left:auto;flex-shrink:0}
+.emp-avatar{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(104,139,147,.24),rgba(114,129,171,.16));border:1px solid rgba(195,220,225,.07);color:#b9d8d3;font-size:13px;font-weight:600}
+.emp-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 22px;margin:0}
+.emp-facts dt{display:flex;align-items:center;gap:7px;font-size:9px;color:#71879f}
+.emp-facts dd{margin:6px 0 0 22px;font-size:10.5px;color:#c2d2e2;line-height:1.6;word-break:break-word}
+.emp-section{border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.015);padding:16px 17px}
+.emp-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+.emp-section-head h3{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:520;color:#c8d7e5}
+.emp-section-head h3 svg{color:#88a7a1;flex-shrink:0}
+.button.emp-add-button{min-height:28px;padding:5px 8px;font-size:9px;color:#9fd3c3;gap:4px}
+.button.emp-add-button:hover:not(:disabled){color:#c9eee2;background:rgba(91,214,177,.08)}
+.emp-chips{display:flex;flex-wrap:wrap;gap:7px}
+.emp-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;border:1px solid rgba(91,214,177,.13);background:rgba(91,214,177,.06);color:#9fd0c0;font-size:9px}
+.emp-chip button{display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;background:transparent;color:#7fa99c;transition:background .18s,color .18s}
+.emp-chip button:hover:not(:disabled){color:#f0b3b8;background:rgba(240,113,120,.1)}
+.emp-credentials{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+.emp-credentials>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.emp-credentials span{display:flex;align-items:center;gap:6px;font-size:8.5px;color:#71879f}
+.emp-credentials strong{font-size:10.5px;font-weight:450;color:#c2d2e2;padding-left:19px;line-height:1.5}
+.emp-muted{font-size:9.5px;color:#788ca0;line-height:1.7}
+.emp-list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.emp-list li{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.05);background:rgba(10,16,23,.16)}
+.emp-list-icon{display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:8px;flex-shrink:0;background:rgba(108,157,255,.07);color:#8da6ce}
+.emp-list-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.emp-list-main strong{font-size:10.5px;font-weight:480;color:#cbd8e5;line-height:1.5}
+.emp-list-main span{font-size:8.5px;color:#7e93a7;line-height:1.5}
+.emp-list-tag{margin-left:auto;padding-top:2px;font-size:8px;color:#7990a4;white-space:nowrap}
+.emp-form-panel{margin-top:13px;padding:14px;border:1px solid rgba(108,157,255,.13);border-radius:11px;background:rgba(108,157,255,.035)}
+.emp-form-panel .form-grid{gap:13px}
+.emp-form-panel .field input,.emp-form-panel .field select{height:37px;font-size:11px}
+.emp-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.emp-group-label{font-size:11px;color:#b2c1cf;font-weight:450}
+.emp-checkbox-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:172px;overflow:auto;padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:rgba(12,19,27,.3)}
+.emp-check{display:flex;align-items:center;gap:8px;min-width:0;font-size:10px;color:#a9bacb;cursor:pointer;line-height:1.5}
+/* Группа чекбоксов лежит внутри .field, поэтому перекрываем общие стили полей ввода. */
+.field .emp-check{font-size:10px;color:#a9bacb;line-height:1.5}
+.field .emp-check span{font-size:10px;color:#a9bacb;overflow-wrap:anywhere}
+.field .emp-checkbox-grid input[type="checkbox"]{width:14px;height:14px;min-width:14px;flex-shrink:0;padding:0;accent-color:var(--mint);cursor:pointer}
+.emp-check input{cursor:pointer}
+
+/* --- Адаптив ------------------------------------------------------- */
+@media(max-width:700px){
+  .emp-toolbar-right{width:100%;flex-wrap:wrap;justify-content:space-between;margin-left:0;gap:9px}
+  .emp-filter{flex:1;min-width:0}
+  .emp-filter select{flex:1;min-width:0;max-width:none}
+  .emp-toolbar-right .table-result-count{margin-left:auto}
+  .emp-card-head{flex-wrap:wrap}
+  .emp-card-head .badge{margin-left:0}
+  .emp-facts{grid-template-columns:1fr}
+  .emp-credentials{grid-template-columns:1fr}
+  .emp-list-tag{display:none}
+}
+@media(max-width:440px){
+  .emp-checkbox-grid{grid-template-columns:1fr}
+  .emp-section{padding:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .emp-chip button{transition-duration:.01ms}
+}

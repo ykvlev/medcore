@@ -1,0 +1,11 @@
+import { useId } from 'react';
+import { Area, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { monthName, number } from '../format';
+import type { MonthlyActivity } from '../types';
+import { Empty } from './ui';
+
+export function MonthlyChart({ data, height = 270 }: { data: MonthlyActivity[]; height?: number }) {
+  const id = useId().replace(/:/g, '');
+  if (!data.length) return <Empty small title="Нет событий за период" description="График появится после регистрации обращений." />;
+  return <div className="activity-chart" style={{ height }} role="img" aria-label={`Динамика медицинских обращений за ${data.length} месяцев`}><ResponsiveContainer width="100%" height="100%"><ComposedChart data={data} margin={{ top: 20, right: 8, left: -26, bottom: 0 }} accessibilityLayer><defs><linearGradient id={`chart-${id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6c9dff" stopOpacity={0.3} /><stop offset="100%" stopColor="#6c9dff" stopOpacity={0} /></linearGradient></defs><CartesianGrid vertical={false} stroke="rgba(255,255,255,.055)" strokeDasharray="3 5" /><XAxis dataKey="month" tickFormatter={monthName} tick={{ fill: '#939caa', fontSize: 11 }} axisLine={false} tickLine={false} dy={10} /><YAxis tick={{ fill: '#7e8898', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} /><Tooltip cursor={{ stroke: 'rgba(255,255,255,.16)', strokeDasharray: '3 3' }} content={({ active, payload, label }) => active && payload?.length ? <div className="chart-tooltip"><strong>{String(label)}</strong>{payload.map(item => <div key={item.dataKey?.toString()}><span style={{ background: item.color }} />{item.dataKey === 'visits' ? 'Обращения' : 'Госпитализации'}<b>{number(Number(item.value))}</b></div>)}</div> : null} /><Area dataKey="visits" name="Обращения" type="monotone" stroke="#6c9dff" strokeWidth={2.5} fill={`url(#chart-${id})`} activeDot={{ r: 5, fill: '#6c9dff', stroke: '#17202f', strokeWidth: 3 }} isAnimationActive={false} /><Line dataKey="hospitalizations" name="Госпитализации" type="monotone" stroke="#5bd6b1" strokeWidth={2} dot={false} activeDot={{ r: 4 }} isAnimationActive={false} /></ComposedChart></ResponsiveContainer></div>;
+}

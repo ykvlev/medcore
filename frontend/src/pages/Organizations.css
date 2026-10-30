@@ -1,0 +1,100 @@
+/* Организации и структура. Дополняет общую тёмную палитру, не меняя styles.css. */
+
+/* --- Список ------------------------------------------------------- */
+.org-toolbar-right{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex:1;min-width:0}
+.org-toolbar-right .search-field{max-width:360px}
+.org-name-cell{display:flex;align-items:center;gap:11px;min-width:0}
+.org-name-cell>span:last-child{display:flex;flex-direction:column;gap:5px;min-width:0}
+.org-name-cell strong{font-weight:480;color:#d5dfec}
+.org-name-cell:hover strong{color:#8bdfc4}
+.org-name-cell small{font-size:8px;color:#708095;white-space:normal;line-height:1.5}
+.org-type-icon{display:flex;align-items:center;justify-content:center;width:33px;height:33px;border-radius:11px;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.055)}
+.org-type-label{color:#a9b8c8;font-size:10px}
+.org-phone{color:#9fb0c3;font-size:10px;font-variant-numeric:tabular-nums}
+
+/* --- Карточка учреждения ------------------------------------------ */
+.org-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.org-status-note{font-size:10.5px;line-height:1.8;color:#95a8ba;margin-bottom:16px}
+.org-current-status{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid rgba(255,255,255,.06);border-radius:9px;background:rgba(255,255,255,.02);font-size:9px;color:#7f93a7;margin-bottom:2px}
+.org-detail-layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;align-items:start}
+.org-summary-panel{padding:24px}
+.org-summary-head{display:flex;align-items:center;gap:13px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.055);margin-bottom:20px}
+.org-summary-head .organization-icon{flex-shrink:0}
+.org-summary-head .organization-type{margin-bottom:7px}
+.org-summary-badges{display:flex;flex-wrap:wrap;gap:8px}
+.org-facts{display:flex;flex-direction:column;gap:18px;margin:20px 0 0}
+.org-facts dt{display:flex;align-items:center;gap:8px;color:#71879f;font-size:9px}
+.org-facts dd{margin:6px 0 0 23px;font-size:11px;color:#c2d2e2;line-height:1.7;word-break:break-word}
+.org-capacity{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.055)}
+.org-capacity-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:9px}
+.org-capacity-head span{font-size:9px;color:#71879f}
+.org-capacity-head strong{font-size:19px;font-weight:520;letter-spacing:-.4px;color:#d7e6e2;font-variant-numeric:tabular-nums}
+.org-capacity p{margin-top:8px;font-size:9px;color:#7d90a3;line-height:1.6}
+.progress-track.progress-mint>span{background:linear-gradient(90deg,rgba(91,214,177,.5),var(--mint))}
+
+/* --- Иерархия ------------------------------------------------------ */
+.org-structure-panel{padding:24px;min-width:0}
+.org-tree{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.org-node{border:1px solid rgba(255,255,255,.065);border-radius:14px;background:rgba(255,255,255,.014);overflow:hidden;min-width:0}
+.org-node-department,.org-node-ward{border-color:rgba(255,255,255,.05);background:rgba(10,16,23,.14)}
+.org-node-row{display:flex;align-items:center;gap:6px;padding:5px 8px 5px 5px;min-height:46px}
+.org-node-toggle{display:flex;align-items:center;gap:9px;flex:1;min-width:0;min-height:36px;padding:8px 9px;border-radius:9px;background:transparent;text-align:left;color:#cfdce8;font-size:11px;transition:background .18s}
+.org-node-toggle:hover{background:rgba(255,255,255,.035)}
+.org-node-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.org-node-department .org-node-toggle,.org-node-ward .org-node-toggle{font-size:10.5px;color:#c3d2e1}
+.org-chevron{color:#7f93a7;flex-shrink:0;transition:transform .18s}
+.org-chevron.is-open{transform:rotate(90deg)}
+.org-node-title{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.org-node-meta{font-size:8.5px;color:#7d90a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%;margin-left:auto;padding-left:12px}
+.org-node-actions{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.button.org-add-button{min-height:28px;padding:5px 8px;font-size:9px;color:#93b8ad;gap:4px}
+.button.org-add-button:hover:not(:disabled){color:#c3ecdf;background:rgba(91,214,177,.08)}
+.org-node-body{display:flex;flex-direction:column;gap:9px;padding:2px 11px 12px 29px}
+.org-node-body[hidden]{display:none}
+.org-empty-inline{font-size:9.5px;color:#788ca0;line-height:1.7;padding:4px 0}
+.org-dept-summary{padding:10px 12px;border:1px solid rgba(255,255,255,.045);border-radius:10px;background:rgba(10,16,23,.16);display:flex;flex-direction:column;gap:8px;margin-bottom:2px}
+.org-dept-progress{display:flex;align-items:center;gap:10px}
+.org-dept-progress .progress-track{flex:1;min-width:70px}
+.org-dept-progress small{font-size:8.5px;color:#7e93a7;white-space:nowrap}
+.org-dept-note{font-size:8.5px;color:#7b8fa3;line-height:1.6}
+.org-structure-hint{display:flex;align-items:center;gap:6px;margin-top:16px;font-size:9px;color:#7d90a3}
+
+/* --- Койки --------------------------------------------------------- */
+.org-beds{display:flex;flex-wrap:wrap;gap:7px}
+.org-bed{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.07);background:rgba(10,16,23,.22);font-size:9px;color:#93a6b9;max-width:100%}
+.org-bed-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.org-bed-number{color:#c3d1df;font-weight:450;white-space:nowrap}
+.org-bed-state{color:#8298ab;font-size:8.5px}
+.org-bed.is-free{border-color:rgba(91,214,177,.14);background:rgba(91,214,177,.05);color:#8fd0bb}
+.org-bed.is-occupied{border-color:rgba(242,182,109,.16);background:rgba(242,182,109,.055);color:#d8b98d}
+.org-bed.is-off{border-color:rgba(255,255,255,.05);background:rgba(255,255,255,.015);color:#7b8a99}
+.org-bed.is-off .org-bed-number{text-decoration:line-through}
+.org-bed-action{display:inline-flex;align-items:center;gap:4px;padding:3px 5px;border-radius:6px;background:transparent;color:#8ba0b3;font-size:8.5px;white-space:nowrap;transition:background .18s,color .18s}
+.org-bed-action:hover:not(:disabled){background:rgba(255,255,255,.07);color:#e2ebf4}
+.org-bed-action:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+
+/* --- Адаптив ------------------------------------------------------- */
+@media(min-width:1180px){
+  .org-summary-panel{position:sticky;top:18px}
+}
+@media(max-width:1180px){
+  .org-detail-layout{grid-template-columns:290px minmax(0,1fr)}
+}
+@media(max-width:1000px){
+  .org-detail-layout{grid-template-columns:1fr}
+  .org-summary-panel{position:static}
+}
+@media(max-width:700px){
+  .org-heading-actions{width:100%;justify-content:flex-start}
+  .org-toolbar-right{width:100%;flex-direction:column;align-items:stretch;gap:9px}
+  .org-toolbar-right .search-field{max-width:none}
+  .org-toolbar .segmented-control{width:100%;justify-content:space-between}
+  .org-node-meta{display:none}
+  .org-node-body{padding-left:16px}
+  .org-node-row{padding-right:5px}
+  .org-summary-panel,.org-structure-panel{padding:18px}
+  .org-facts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .org-chevron,.org-node-toggle,.org-bed-action{transition-duration:.01ms}
+}

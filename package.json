@@ -1,0 +1,12 @@
+{
+  "name": "medcore-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:database": "node tools/check-database.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.3.14",
+    "pg": "8.23.1"
+  }
+}

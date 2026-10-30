@@ -1,0 +1,71 @@
+{
+  "performedAt": "2026-10-30T12:33:57.776Z",
+  "schema": "project",
+  "result": "passed",
+  "migrations": [
+    {
+      "file": "001_initial_schema.sql",
+      "sha256": "1425f2dd74e7c6e1ec8633d1c1aed1085db5f982cfc756884fab39ef7f231fcd",
+      "result": "passed"
+    },
+    {
+      "file": "002_business_rules.sql",
+      "sha256": "84ffc6eee8a9c278664861e35bb90876af5dc5bea5475d59d4eca01ff16a8753",
+      "result": "passed"
+    },
+    {
+      "file": "003_stored_objects.sql",
+      "sha256": "e685fffd31b7104435076b8095302d552ceebcac7ba32a4614bf890e55e5d368",
+      "result": "passed"
+    }
+  ],
+  "checks": [
+    {
+      "name": "12 prepared queries compile on the educational server",
+      "result": "passed"
+    },
+    {
+      "name": "002_business_rules.sql",
+      "result": "passed",
+      "dataRolledBack": true,
+      "sequenceValuesMayAdvance": true
+    },
+    {
+      "name": "003_stored_objects.sql",
+      "result": "passed",
+      "dataRolledBack": true,
+      "sequenceValuesMayAdvance": true
+    }
+  ],
+  "serverVersion": "PostgreSQL 18.0 on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "inventory": [
+    {
+      "table_type": "BASE TABLE",
+      "count": 48
+    },
+    {
+      "table_type": "VIEW",
+      "count": 3
+    }
+  ],
+  "routines": [
+    {
+      "routine_type": "FUNCTION",
+      "count": 11
+    },
+    {
+      "routine_type": "PROCEDURE",
+      "count": 4
+    }
+  ],
+  "extensions": [
+    {
+      "extname": "btree_gist",
+      "extversion": "1.8"
+    },
+    {
+      "extname": "pg_trgm",
+      "extversion": "1.6"
+    }
+  ]
+}

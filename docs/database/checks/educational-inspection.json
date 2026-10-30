@@ -1,0 +1,358 @@
+{
+  "inspectedAt": "2026-10-30T12:28:50.225Z",
+  "mode": "read-only",
+  "result": "passed",
+  "server": {
+    "database": "db_a_s_yakovlev",
+    "username": "a-s-yakovlev",
+    "version": "18.0",
+    "encoding": "UTF8",
+    "can_create_schema": true
+  },
+  "ssl": {
+    "ssl": false,
+    "version": null,
+    "cipher": null
+  },
+  "role": {
+    "rolsuper": false,
+    "rolcreatedb": false,
+    "rolcreaterole": false
+  },
+  "schemas": [
+    {
+      "name": "home",
+      "owner": "a-s-yakovlev",
+      "can_create": true
+    },
+    {
+      "name": "mfc",
+      "owner": "a-s-yakovlev",
+      "can_create": true
+    },
+    {
+      "name": "project",
+      "owner": "a-s-yakovlev",
+      "can_create": true
+    },
+    {
+      "name": "public",
+      "owner": "pg_database_owner",
+      "can_create": true
+    },
+    {
+      "name": "study",
+      "owner": "a-s-yakovlev",
+      "can_create": true
+    },
+    {
+      "name": "work",
+      "owner": "a-s-yakovlev",
+      "can_create": true
+    }
+  ],
+  "objects": [
+    {
+      "table_schema": "home",
+      "table_name": "dz1_dolzhnost",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "home",
+      "table_name": "dz1_organizatsiya",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "home",
+      "table_name": "dz1_otdel",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "home",
+      "table_name": "dz1_otpusk",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "home",
+      "table_name": "dz1_prikaz",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "home",
+      "table_name": "dz1_sotrudnik",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "_prisma_migrations",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "announcements",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "application_stages",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "application_types",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "applications",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "booking_periods",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "bookings",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "cells",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "device_tokens",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "event_log",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "files",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "notifications",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "refresh_tokens",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "route_steps",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "slot_bookings",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "slot_windows",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "mfc",
+      "table_name": "users",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "project",
+      "table_name": "agencies",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "project",
+      "table_name": "launch_sites",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "project",
+      "table_name": "launches",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "project",
+      "table_name": "orbit_dashboard",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "project",
+      "table_name": "orbital_data",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "project",
+      "table_name": "space_objects",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "about",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "authors",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "book_author",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "books",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "books_log",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "boolz",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "cnt_book",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "events",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "logticket",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "max_z",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "min_g",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "std_book",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "tek_z",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "tickets",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "tickets_log",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "users",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "users_copy",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "users_copy_pr5",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "users_log",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "viewbook",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "Раздел",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "study",
+      "table_name": "Расчет",
+      "table_type": "VIEW"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_kategoriya",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_klassifikatsiya",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_komandirovka",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_komandirovka_kopiya",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_spisok_arhiv",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_spisok_sotrudnikov",
+      "table_type": "BASE TABLE"
+    },
+    {
+      "table_schema": "work",
+      "table_name": "case_svodka_otdely",
+      "table_type": "BASE TABLE"
+    }
+  ],
+  "extensions": [
+    {
+      "name": "btree_gist",
+      "default_version": "1.8",
+      "installed_version": null
+    },
+    {
+      "name": "pg_trgm",
+      "default_version": "1.6",
+      "installed_version": null
+    }
+  ]
+}

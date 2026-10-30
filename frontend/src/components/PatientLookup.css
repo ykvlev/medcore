@@ -1,0 +1,13 @@
+.patient-lookup{display:flex;flex-direction:column;gap:7px}
+.patient-lookup .search-field{max-width:none}
+.patient-lookup-state{margin:0;font-size:10px;color:#8194a8;line-height:1.6}
+.patient-lookup-results{list-style:none;margin:5px 0 0;padding:5px;display:flex;flex-direction:column;gap:2px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(12,19,27,.4);max-height:225px;overflow-y:auto}
+.patient-lookup-results button{display:flex;flex-direction:column;gap:4px;width:100%;padding:9px 10px;text-align:left;border-radius:7px;background:transparent;transition:background .16s}
+.patient-lookup-results button:hover,.patient-lookup-results button:focus-visible{background:rgba(255,255,255,.055)}
+.patient-lookup-results strong{font-size:11px;font-weight:500;color:#d3dfec}
+.patient-lookup-results span{font-size:9px;color:#7f92a8}
+.patient-lookup-selected{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;border:1px solid rgba(91,214,177,.13);border-radius:11px;background:rgba(91,214,177,.045)}
+.patient-lookup-selected>span{display:flex;flex-direction:column;gap:5px;min-width:0}
+.patient-lookup-selected strong{font-size:12px;font-weight:500;color:#d9ebe4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.patient-lookup-selected small{font-size:9px;color:#83a89f}
+.patient-lookup-selected .button{flex-shrink:0}

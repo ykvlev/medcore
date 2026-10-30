@@ -1,0 +1,22 @@
+{
+  "performedAt": "2026-10-30T12:32:23.318Z",
+  "source": "project",
+  "target": "space_archive",
+  "result": "passed",
+  "before": {
+    "agencies": "0",
+    "launch_sites": "0",
+    "launches": "0",
+    "orbital_data": "68762",
+    "space_objects": "70813"
+  },
+  "after": {
+    "agencies": "0",
+    "launch_sites": "0",
+    "launches": "0",
+    "orbital_data": "68762",
+    "space_objects": "70813"
+  },
+  "remainingProjectRelations": [],
+  "viewValid": true
+}

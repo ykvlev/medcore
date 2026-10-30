@@ -1,0 +1,13 @@
+.git
+.gitignore
+materials
+tmp
+.tools
+backups
+docs
+frontend
+**/bin
+**/obj
+**/node_modules
+**/dist
+*.dump

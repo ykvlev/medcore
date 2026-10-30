@@ -1,0 +1,138 @@
+{
+  "performedAt": "2026-10-30T12:51:27.301Z",
+  "mode": "isolated-pglite",
+  "anchorDate": "2026-10-30",
+  "schema": "project",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "all current migrations applied to isolated empty database",
+      "result": "passed"
+    },
+    {
+      "name": "single seed transaction and deferred business constraints committed",
+      "result": "passed"
+    },
+    {
+      "name": "all six account hashes verify as ASP.NET Identity V3",
+      "result": "passed"
+    },
+    {
+      "name": "laboratory result authors have matching laboratory scope",
+      "result": "passed"
+    },
+    {
+      "name": "all referrals fall within their source medical case",
+      "result": "passed"
+    },
+    {
+      "name": "manager, registrar and doctor scopes match employment",
+      "result": "passed"
+    },
+    {
+      "name": "Q01 executes against full dataset",
+      "result": "passed",
+      "rowCount": 25
+    },
+    {
+      "name": "Q02 executes against full dataset",
+      "result": "passed",
+      "rowCount": 52
+    },
+    {
+      "name": "Q03 executes against full dataset",
+      "result": "passed",
+      "rowCount": 30
+    },
+    {
+      "name": "Q04 executes against full dataset",
+      "result": "passed",
+      "rowCount": 13
+    },
+    {
+      "name": "Q05 executes against full dataset",
+      "result": "passed",
+      "rowCount": 36
+    },
+    {
+      "name": "Q06 executes against full dataset",
+      "result": "passed",
+      "rowCount": 5
+    },
+    {
+      "name": "Q07 executes against full dataset",
+      "result": "passed",
+      "rowCount": 30
+    },
+    {
+      "name": "Q08 executes against full dataset",
+      "result": "passed",
+      "rowCount": 1
+    },
+    {
+      "name": "Q09 executes against full dataset",
+      "result": "passed",
+      "rowCount": 500
+    },
+    {
+      "name": "Q10 executes against full dataset",
+      "result": "passed",
+      "rowCount": 447
+    },
+    {
+      "name": "Q11 executes against full dataset",
+      "result": "passed",
+      "rowCount": 5
+    },
+    {
+      "name": "Q12 executes against full dataset",
+      "result": "passed",
+      "rowCount": 30
+    },
+    {
+      "name": "repeat seeding refused without changing existing data",
+      "result": "passed",
+      "sqlState": "55000"
+    }
+  ],
+  "credentials": {
+    "logins": [
+      "admin",
+      "manager",
+      "doctor",
+      "registrar",
+      "lab",
+      "analyst"
+    ],
+    "passwordSource": "MEDCORE_DEMO_PASSWORD environment variable",
+    "hashFormat": "ASP.NET Identity V3 PBKDF2-HMAC-SHA512, 210000 iterations, random 16-byte salt, 32-byte subkey"
+  },
+  "seedSha256": "6881a6e26f3807cee66f5b6b2260c5ecc70e1c3377d3db12fdb24add9ab833b9",
+  "engine": "PostgreSQL 17.5 on aarch64-unknown-linux-gnu, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+  "counts": {
+    "hospitals": 5,
+    "polyclinics": 8,
+    "buildings": 12,
+    "departments": 30,
+    "wards": 100,
+    "beds": 300,
+    "doctors": 120,
+    "employees": 200,
+    "patients": 1000,
+    "medical_cases": 2000,
+    "hospitalizations": 500,
+    "active_hospitalizations": 100,
+    "surgeries": 200,
+    "laboratories": 6,
+    "laboratory_contracts": 20,
+    "lab_orders": 600,
+    "lab_results": 500,
+    "users": 6
+  },
+  "capacity": {
+    "total_beds": 300,
+    "occupied_beds": 100,
+    "free_beds": 200,
+    "unavailable_beds": 0
+  }
+}

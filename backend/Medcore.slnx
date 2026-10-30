@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Medcore.Api/Medcore.Api.csproj" />
+  <Project Path="Medcore.Application/Medcore.Application.csproj" />
+  <Project Path="Medcore.Domain/Medcore.Domain.csproj" />
+  <Project Path="Medcore.Infrastructure/Medcore.Infrastructure.csproj" />
+  <Project Path="Medcore.Tests/Medcore.Tests.csproj" />
+</Solution>
