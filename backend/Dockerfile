@@ -12,7 +12,7 @@ RUN dotnet publish backend/Medcore.Api/Medcore.Api.csproj -c Release -o /app --n
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app .
-ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+# Порт задаёт хостинг (Render передаёт PORT); локально приложение слушает 5180.
 ENV ASPNETCORE_ENVIRONMENT=Production
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "Medcore.Api.dll"]

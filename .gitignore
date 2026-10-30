@@ -1,5 +1,7 @@
 .env
 !.env.example
+# Служебные файлы Vercel CLI.
+.vercel/
 node_modules/
 bin/
 obj/
@@ -18,3 +20,4 @@ materials/
 # Временные каталоги предпросмотра документов.
 .dsh-office-*/
 *.dump
+.neon

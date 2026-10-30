@@ -11,9 +11,36 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
-if (string.IsNullOrEmpty(builder.Configuration["urls"]) && string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_URLS")))
-    builder.WebHost.UseUrls("http://localhost:5180");
+// Render и подобные хостинги передают порт в PORT; локально остаётся 5180.
+var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+if (string.IsNullOrEmpty(configuredUrls))
+{
+    var hostPort = Environment.GetEnvironmentVariable("PORT");
+    builder.WebHost.UseUrls(string.IsNullOrEmpty(hostPort) ? "http://localhost:5180" : $"http://0.0.0.0:{hostPort}");
+}
 var connectionString = builder.Configuration.GetConnectionString("Medcore");
+// Neon и другие управляемые PostgreSQL выдают строку в формате URI (DATABASE_URL).
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (string.IsNullOrWhiteSpace(connectionString) && !string.IsNullOrWhiteSpace(databaseUrl))
+{
+    var uri = new Uri(databaseUrl);
+    var credentials = uri.UserInfo.Split(':', 2);
+    var fromUrl = new NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.IsDefaultPort ? 5432 : uri.Port,
+        Database = uri.AbsolutePath.Trim('/'),
+        Username = Uri.UnescapeDataString(credentials[0]),
+        Password = credentials.Length > 1 ? Uri.UnescapeDataString(credentials[1]) : string.Empty,
+        SslMode = SslMode.Require,
+        SearchPath = "project,public",
+        Timezone = "Europe/Moscow",
+        Timeout = 15,
+        CommandTimeout = 60,
+        IncludeErrorDetail = false
+    };
+    connectionString = fromUrl.ConnectionString;
+}
 if (string.IsNullOrWhiteSpace(connectionString))
 {
     var connection = new NpgsqlConnectionStringBuilder

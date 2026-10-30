@@ -12,14 +12,12 @@ services:
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
-      - key: ASPNETCORE_URLS
-        value: http://0.0.0.0:8080
       # Клиент и API на разных доменах: cookie должна быть SameSite=None.
       - key: MEDCORE_COOKIE_SAMESITE
         value: None
       # Домен клиента на Vercel, например https://medcore.vercel.app
       - key: MEDCORE_FRONTEND_ORIGINS
         sync: false
-      # Строка подключения Npgsql к внешнему PostgreSQL (Neon).
-      - key: ConnectionStrings__Medcore
+      # Строка подключения в формате URI (Neon): postgresql://user:pass@host/db
+      - key: DATABASE_URL
         sync: false
