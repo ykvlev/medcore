@@ -88,12 +88,12 @@ BEGIN
         ('surgical','Хирургическое направление'),('therapeutic','Терапевтическое направление'),
         ('neurological','Неврологическое направление'),('ophthalmic','Офтальмологическое направление'),
         ('gynecological','Гинекологическое направление') ON CONFLICT(code) DO NOTHING;
-    INSERT INTO project.diagnoses(code,name,chapter) VALUES
-        ('I10','Эссенциальная (первичная) гипертензия','IX'),
-        ('E11.9','Сахарный диабет 2 типа без осложнений','IV'),
-        ('J18.9','Пневмония неуточнённая','X'),
-        ('K29.7','Гастрит неуточнённый','XI'),
-        ('M54.5','Боль в нижней части спины','XIII') ON CONFLICT(code) DO NOTHING;
+    INSERT INTO project.diagnoses(code,name) VALUES
+        ('I10','Эссенциальная (первичная) гипертензия'),
+        ('E11.9','Сахарный диабет 2 типа без осложнений'),
+        ('J18.9','Пневмония неуточнённая'),
+        ('K29.7','Гастрит неуточнённый'),
+        ('M54.5','Боль в нижней части спины') ON CONFLICT(code) DO NOTHING;
 
     FOR v_n IN 1..5 LOOP
         INSERT INTO project.medical_organizations(name,organization_type,address,phone,email,is_active)

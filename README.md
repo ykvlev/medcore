@@ -44,6 +44,10 @@ node tools/run-dev.mjs             # сервер http://127.0.0.1:5180 и кл�
 
 Комплект сдачи — `docs/deliverables/`: техническое задание, пояснительная записка, аннотация, ведомость (по выданному шаблону), план-график, руководства пользователя и администратора, диаграммы (`docs/deliverables/diagrams`). Снимки экранов — `docs/screenshots/`.
 
+## Размещение
+
+Клиент собирается в статику и размещается на Vercel (`frontend/vercel.json`), сервер — в контейнере `backend/Dockerfile`, база — во внешнем PostgreSQL. Пошаговая инструкция: [docs/deployment.md](docs/deployment.md).
+
 ## Состояние
 
 Подробное состояние и ограничения: `docs/project/current-state.md`. План: `docs/project/roadmap.md`. Требования: `docs/project/requirements.md`. Контракт API: `docs/project/api-contract.md`.
