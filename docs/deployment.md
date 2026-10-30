@@ -54,12 +54,30 @@ docker run --rm -p 8080:8080 --env-file .env medcore-api
 ## 4. База данных для демонстрации
 
 1. Создать PostgreSQL (Neon, Supabase, Render PostgreSQL).
-2. Применить миграции по порядку:
-   `database/migrations/001_initial_schema.sql` … `005_specialties.sql`.
-3. Загрузить демонстрационный набор `database/seeds/demo.sql` (пароль задаётся
-   переменной `medcore.seed_password_hash`; локальный запуск — `tools/seed-educational-db.mjs`).
-4. Проверить: `node tools/check-api.mjs` и `node tools/check-api-stage2.mjs`
-   с `MEDCORE_API_URL`, указывающим на развёрнутый сервер.
+2. Подготовить базу одной командой — она применит миграции, загрузит
+   демонстрационный набор и справочник МКБ-10:
+
+   ```powershell
+   $env:DATABASE_URL = "postgresql://user:password@host/db?sslmode=require"
+   $env:MEDCORE_DEMO_PASSWORD = "демонстрационный-пароль"
+   node tools/bootstrap-public-db.mjs
+   ```
+
+   Скрипт отказывается работать с непустой схемой `project`. Ожидаемый итог:
+   13 организаций, 1 000 пациентов, 500 госпитализаций, 47 кодов МКБ-10,
+   11 ролей и 11 учётных записей.
+3. Проверить развёрнутый сервер:
+
+   ```powershell
+   $env:MEDCORE_API_URL = "https://<сервер>"
+   $env:MEDCORE_DATABASE_URL = "postgresql://...?sslmode=require"
+   node tools/check-api.mjs
+   node tools/check-api-stage2.mjs
+   node tools/check-api-roles.mjs
+   ```
+
+Подготовка базы проверена локально на чистом кластере PostgreSQL 18:
+bootstrap и 33 проверки API прошли полностью.
 
 ## Ограничения публичной демонстрации
 
