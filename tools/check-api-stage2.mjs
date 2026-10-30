@@ -1,6 +1,6 @@
-﻿// РЎРєРІРѕР·РЅС‹Рµ HTTP-РїСЂРѕРІРµСЂРєРё РІС‚РѕСЂРѕРіРѕ СЌС‚Р°РїР°: СЃРїСЂР°РІРѕС‡РЅРёРєРё, СЃС‚СЂСѓРєС‚СѓСЂР°, СЃС‚Р°С†РёРѕРЅР°СЂ,
-// Р»Р°Р±РѕСЂР°С‚РѕСЂРёРё, Р°РґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёРµ, РѕС‚С‡С‘С‚С‹ Рё СЌРєСЃРїРѕСЂС‚. РўРѕР»СЊРєРѕ С‡С‚РµРЅРёРµ Рё СЌРєСЃРїРѕСЂС‚;
-// РґР°РЅРЅС‹Рµ РЅРµ РёР·РјРµРЅСЏСЋС‚СЃСЏ. РћС‚С‡С‘С‚: docs/database/checks/api-stage2-report.json.
+// Сквозные HTTP-проверки второго этапа: справочники, структура, стационар,
+// лаборатории, администрирование, отчёты и экспорт. Только чтение и экспорт;
+// данные не изменяются. Отчёт: docs/database/checks/api-stage2-report.json.
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,8 +15,8 @@ const report = {
   result: 'pending',
   checks: [],
   limitations: [
-    'РўРѕР»СЊРєРѕ С‡С‚РµРЅРёРµ Рё СЌРєСЃРїРѕСЂС‚: Р·Р°РїРёСЃРё СЃС‚Р°С†РёРѕРЅР°СЂР° Рё СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РЅРµ СЃРѕР·РґР°РІР°Р»РёСЃСЊ, С‡С‚РѕР±С‹ РЅРµ РѕСЃС‚Р°РІР»СЏС‚СЊ РЅРµСѓРґР°Р»СЏРµРјС‹С… РґРµРјРѕРЅСЃС‚СЂР°С†РёРѕРЅРЅС‹С… СЃС‚СЂРѕРє.',
-    'РџСЂРѕРІРµСЂСЏСЋС‚СЃСЏ РєРѕРґС‹ РѕС‚РІРµС‚РѕРІ Рё С„РѕСЂРјР° РґР°РЅРЅС‹С…, Р° РЅРµ РІРёР·СѓР°Р»СЊРЅРѕРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РІ Р±СЂР°СѓР·РµСЂРµ.'
+    'Только чтение и экспорт: записи стационара и результатов не создавались, чтобы не оставлять неудаляемых демонстрационных строк.',
+    'Проверяются коды ответов и форма данных, а не визуальное отображение в браузере.'
   ]
 };
 
@@ -53,14 +53,14 @@ async function request(endpoint, { cookie, method = 'GET', body, raw = false } =
 
 async function login(name) {
   const result = await request('/api/auth/login', { method: 'POST', body: { login: name, password: process.env.MEDCORE_DEMO_PASSWORD } });
-  check(result.status === 200 && !!result.cookie, `${name}: РІС…РѕРґ РІС‹РїРѕР»РЅРµРЅ`);
+  check(result.status === 200 && !!result.cookie, `${name}: вход выполнен`);
   return result.cookie;
 }
 
 const period = 'from=2026-01-01&to=2026-10-31';
 const sessions = [];
 try {
-  check((await request('/api/auth/me')).status === 401, 'Р°РЅРѕРЅРёРјРЅС‹Р№ Р·Р°РїСЂРѕСЃ РѕС‚РєР»РѕРЅС‘РЅ');
+  check((await request('/api/auth/me')).status === 401, 'анонимный запрос отклонён');
   const registrar = await login('registrar'); sessions.push(registrar);
   const manager = await login('manager'); sessions.push(manager);
   const doctor = await login('doctor'); sessions.push(doctor);
@@ -68,91 +68,91 @@ try {
   const analyst = await login('analyst'); sessions.push(analyst);
   const admin = await login('admin'); sessions.push(admin);
 
-  // РћСЂРіР°РЅРёР·Р°С†РёРё Рё СЃС‚СЂСѓРєС‚СѓСЂР°.
+  // Организации и структура.
   const organizations = await request('/api/organizations?page=1&pageSize=5', { cookie: registrar });
   check(organizations.status === 200 && Array.isArray(organizations.data?.items) && organizations.data.items.length <= 5,
-    'СЂРµРµСЃС‚СЂ РѕСЂРіР°РЅРёР·Р°С†РёР№ РѕС‚РґР°С‘С‚ СЃС‚СЂР°РЅРёС†Сѓ', { total: organizations.data?.total });
+    'реестр организаций отдаёт страницу', { total: organizations.data?.total });
   const hospitals = await request('/api/organizations?type=hospital&page=1&pageSize=10', { cookie: registrar });
   check(hospitals.status === 200 && hospitals.data.items.every(o => o.organizationType === 'hospital'),
-    'С„РёР»СЊС‚СЂ РїРѕ С‚РёРїСѓ СѓС‡СЂРµР¶РґРµРЅРёСЏ СЂР°Р±РѕС‚Р°РµС‚', { count: hospitals.data?.items?.length });
+    'фильтр по типу учреждения работает', { count: hospitals.data?.items?.length });
   const hospital = hospitals.data.items[0];
   const card = await request(`/api/organizations/${hospital.id}`, { cookie: registrar });
   const departments = (card.data?.buildings ?? []).flatMap(b => b.departments ?? []);
-  check(card.status === 200 && departments.length > 0, 'РєР°СЂС‚РѕС‡РєР° Р±РѕР»СЊРЅРёС†С‹ СЃРѕРґРµСЂР¶РёС‚ РёРµСЂР°СЂС…РёСЋ РѕС‚РґРµР»РµРЅРёР№',
+  check(card.status === 200 && departments.length > 0, 'карточка больницы содержит иерархию отделений',
     { buildings: card.data?.buildings?.length, departments: departments.length });
   const wards = departments.flatMap(d => d.wards ?? []);
-  check(wards.length > 0 && (wards[0].beds ?? []).length > 0, 'РїР°Р»Р°С‚С‹ СЃРѕРґРµСЂР¶Р°С‚ РєРѕР№РєРё');
+  check(wards.length > 0 && (wards[0].beds ?? []).length > 0, 'палаты содержат койки');
   const dictionaries = await request('/api/dictionaries', { cookie: registrar });
   check(dictionaries.status === 200 && dictionaries.data.specializations.length > 0
     && dictionaries.data.labTestTypes.length > 0 && dictionaries.data.diagnoses.length > 0,
-    'СЃРїСЂР°РІРѕС‡РЅРёРєРё РѕС‚РґР°СЋС‚СЃСЏ РѕРґРЅРёРј Р·Р°РїСЂРѕСЃРѕРј', { specializations: dictionaries.data?.specializations?.length });
+    'справочники отдаются одним запросом', { specializations: dictionaries.data?.specializations?.length });
 
-  // РџРµСЂСЃРѕРЅР°Р».
+  // Персонал.
   const employees = await request('/api/employees?page=1&pageSize=10', { cookie: manager });
-  check(employees.status === 200 && employees.data.items.length > 0, 'СЂРµРµСЃС‚СЂ СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РѕС‚РґР°С‘С‚ СЃС‚СЂР°РЅРёС†Сѓ',
+  check(employees.status === 200 && employees.data.items.length > 0, 'реестр сотрудников отдаёт страницу',
     { total: employees.data?.total });
   const employeeCard = await request(`/api/employees/${employees.data.items[0].id}`, { cookie: manager });
-  check(employeeCard.status === 200 && !!employeeCard.data.employee, 'РєР°СЂС‚РѕС‡РєР° СЃРѕС‚СЂСѓРґРЅРёРєР° РґРѕСЃС‚СѓРїРЅР° Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ');
+  check(employeeCard.status === 200 && !!employeeCard.data.employee, 'карточка сотрудника доступна администратору');
   check((await request('/api/employees?page=1&pageSize=500', { cookie: manager })).status === 400,
-    'СЃР»РёС€РєРѕРј Р±РѕР»СЊС€РѕР№ СЂР°Р·РјРµСЂ СЃС‚СЂР°РЅРёС†С‹ РѕС‚РєР»РѕРЅС‘РЅ');
+    'слишком большой размер страницы отклонён');
 
-  // РЎС‚Р°С†РёРѕРЅР°СЂ.
+  // Стационар.
   const hospitalizations = await request('/api/hospitalizations?page=1&pageSize=10', { cookie: registrar });
   check(hospitalizations.status === 200 && hospitalizations.data.items.length > 0,
-    'СЃРїРёСЃРѕРє РіРѕСЃРїРёС‚Р°Р»РёР·Р°С†РёР№ РѕС‚РґР°С‘С‚ СЃС‚СЂР°РЅРёС†Сѓ', { total: hospitalizations.data?.total });
+    'список госпитализаций отдаёт страницу', { total: hospitalizations.data?.total });
   const firstHospitalization = hospitalizations.data.items[0];
   const hospitalizationCard = await request(`/api/hospitalizations/${firstHospitalization.id}`, { cookie: doctor });
   check(hospitalizationCard.status === 200 && Array.isArray(hospitalizationCard.data.placements)
-    && Array.isArray(hospitalizationCard.data.attending), 'РєР°СЂС‚РѕС‡РєР° РіРѕСЃРїРёС‚Р°Р»РёР·Р°С†РёРё СЃРѕРґРµСЂР¶РёС‚ СЂР°Р·РјРµС‰РµРЅРёСЏ Рё РІСЂР°С‡РµР№',
+    && Array.isArray(hospitalizationCard.data.attending), 'карточка госпитализации содержит размещения и врачей',
     { placements: hospitalizationCard.data?.placements?.length });
   const departmentId = departments[0].id;
   const beds = await request(`/api/beds/available?departmentId=${departmentId}`, { cookie: doctor });
-  check(beds.status === 200 && Array.isArray(beds.data.items), 'СЃРІРѕР±РѕРґРЅС‹Рµ РєРѕР№РєРё РѕС‚РґРµР»РµРЅРёСЏ РѕС‚РґР°СЋС‚СЃСЏ СЃРїРёСЃРєРѕРј',
+  check(beds.status === 200 && Array.isArray(beds.data.items), 'свободные койки отделения отдаются списком',
     { free: beds.data?.items?.length });
 
-  // Р›Р°Р±РѕСЂР°С‚РѕСЂРёРё.
+  // Лаборатории.
   const laboratories = await request('/api/laboratories', { cookie: doctor });
-  check(laboratories.status === 200 && laboratories.data.items.length > 0, 'РІСЂР°С‡ РІРёРґРёС‚ СЃРїРёСЃРѕРє Р»Р°Р±РѕСЂР°С‚РѕСЂРёР№');
+  check(laboratories.status === 200 && laboratories.data.items.length > 0, 'врач видит список лабораторий');
   const labOrders = await request('/api/lab-orders?page=1&pageSize=10', { cookie: lab });
-  check(labOrders.status === 200 && labOrders.data.items.length > 0, 'Р·Р°РєР°Р·С‹ РёСЃСЃР»РµРґРѕРІР°РЅРёР№ РѕС‚РґР°СЋС‚СЃСЏ СЃС‚СЂР°РЅРёС†РµР№',
+  check(labOrders.status === 200 && labOrders.data.items.length > 0, 'заказы исследований отдаются страницей',
     { total: labOrders.data?.total });
   const labOrder = await request(`/api/lab-orders/${labOrders.data.items[0].id}`, { cookie: lab });
-  check(labOrder.status === 200 && typeof labOrder.data.patientName === 'string', 'РєР°СЂС‚РѕС‡РєР° Р·Р°РєР°Р·Р° СЃРѕРґРµСЂР¶РёС‚ РїР°С†РёРµРЅС‚Р° Рё РёСЃСЃР»РµРґРѕРІР°РЅРёРµ');
+  check(labOrder.status === 200 && typeof labOrder.data.patientName === 'string', 'карточка заказа содержит пациента и исследование');
 
-  // РћС‚С‡С‘С‚С‹ Рё СЌРєСЃРїРѕСЂС‚.
+  // Отчёты и экспорт.
   for (const kind of ['occupancy', 'patients', 'hospitalizations', 'doctors', 'surgeries', 'laboratory']) {
     const table = await request(`/api/reports/${kind}?${period}`, { cookie: analyst });
     check(table.status === 200 && Array.isArray(table.data.rows) && Array.isArray(table.data.columns)
       && table.data.kind === kind && table.data.totals.rowCount === table.data.rows.length,
-      `РѕС‚С‡С‘С‚ ${kind} РѕС‚РґР°С‘С‚ СЃС‚СЂРѕРєРё Рё РєРѕР»РѕРЅРєРё`, { rows: table.data?.rows?.length });
+      `отчёт ${kind} отдаёт строки и колонки`, { rows: table.data?.rows?.length });
   }
   const csv = await request(`/api/reports/occupancy/export?format=csv&${period}`, { cookie: analyst, raw: true });
   const csvText = csv.buffer.toString('utf8');
   check(csv.status === 200 && csv.buffer[0] === 0xef && csv.buffer[1] === 0xbb && csv.buffer[2] === 0xbf
     && /attachment/i.test(csv.headers.get('content-disposition') ?? '') && csvText.includes(';'),
-    'CSV РѕС‚С‡С‘С‚Р° СЃРєР°С‡РёРІР°РµС‚СЃСЏ СЃ BOM Рё СЂР°Р·РґРµР»РёС‚РµР»РµРј ;', { bytes: csv.buffer.length });
+    'CSV отчёта скачивается с BOM и разделителем ;', { bytes: csv.buffer.length });
   const pdf = await request(`/api/reports/hospitalizations/export?format=pdf&${period}`, { cookie: analyst, raw: true });
   check(pdf.status === 200 && pdf.buffer.subarray(0, 5).toString('latin1') === '%PDF-'
     && /application\/pdf/i.test(pdf.headers.get('content-type') ?? ''),
-    'PDF РѕС‚С‡С‘С‚Р° СЃРєР°С‡РёРІР°РµС‚СЃСЏ РєР°Рє PDF-С„Р°Р№Р»', { bytes: pdf.buffer.length });
+    'PDF отчёта скачивается как PDF-файл', { bytes: pdf.buffer.length });
 
-  // РђРґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёРµ.
+  // Администрирование.
   const users = await request('/api/admin/users', { cookie: admin });
-  check(users.status === 200 && users.data.items.length >= 6, 'СЃРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РґРѕСЃС‚СѓРїРµРЅ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ',
+  check(users.status === 200 && users.data.items.length >= 6, 'список пользователей доступен администратору',
     { users: users.data?.items?.length });
   const roles = await request('/api/admin/roles', { cookie: admin });
   check(roles.status === 200 && roles.data.items.length >= 11 && roles.data.items.some(r => r.code === 'chief_physician'),
-    'СЃРїСЂР°РІРѕС‡РЅРёРє СЂРѕР»РµР№ СЃРѕРґРµСЂР¶РёС‚ РѕРґРёРЅРЅР°РґС†Р°С‚СЊ СЂРѕР»РµР№', { roles: roles.data?.items?.length });
+    'справочник ролей содержит одиннадцать ролей', { roles: roles.data?.items?.length });
   const audit = await request('/api/admin/audit?page=1&pageSize=10', { cookie: admin });
-  check(audit.status === 200 && audit.data.items.length > 0, 'Р¶СѓСЂРЅР°Р» Р°СѓРґРёС‚Р° РѕС‚РґР°С‘С‚ СЃС‚СЂР°РЅРёС†Сѓ',
+  check(audit.status === 200 && audit.data.items.length > 0, 'журнал аудита отдаёт страницу',
     { total: audit.data?.total });
 
-  // РћРіСЂР°РЅРёС‡РµРЅРёСЏ РґРѕСЃС‚СѓРїР°.
-  check((await request('/api/admin/users', { cookie: registrar })).status === 403, 'СЂРµРіРёСЃС‚СЂР°С‚РѕСЂСѓ Р·Р°РєСЂС‹С‚ СЂР°Р·РґРµР» РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№');
-  check((await request('/api/reports/occupancy', { cookie: doctor })).status === 403, 'РІСЂР°С‡Сѓ Р·Р°РєСЂС‹С‚С‹ РѕС‚С‡С‘С‚С‹ СЃРµС‚Рё');
-  check((await request('/api/reports/occupancy', { cookie: admin })).status === 403, 'С‚РµС…РЅРёС‡РµСЃРєРѕРјСѓ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ Р·Р°РєСЂС‹С‚С‹ РјРµРґРёС†РёРЅСЃРєРёРµ РѕС‚С‡С‘С‚С‹');
-  check((await request('/api/patients?page=1', { cookie: analyst })).status === 403, 'Р°РЅР°Р»РёС‚РёРєСѓ Р·Р°РєСЂС‹С‚С‹ РїРµСЂСЃРѕРЅР°Р»СЊРЅС‹Рµ РєР°СЂС‚РѕС‡РєРё');
-  check((await request(`/api/organizations/${hospital.id}`, { cookie: '' })).status === 401, 'Р±РµР· СЃРµСЃСЃРёРё РєР°СЂС‚РѕС‡РєР° РЅРµРґРѕСЃС‚СѓРїРЅР°');
+  // Ограничения доступа.
+  check((await request('/api/admin/users', { cookie: registrar })).status === 403, 'регистратору закрыт раздел пользователей');
+  check((await request('/api/reports/occupancy', { cookie: doctor })).status === 403, 'врачу закрыты отчёты сети');
+  check((await request('/api/reports/occupancy', { cookie: admin })).status === 403, 'техническому администратору закрыты медицинские отчёты');
+  check((await request('/api/patients?page=1', { cookie: analyst })).status === 403, 'аналитику закрыты персональные карточки');
+  check((await request(`/api/organizations/${hospital.id}`, { cookie: '' })).status === 401, 'без сессии карточка недоступна');
 
   report.result = failures.length === 0 ? 'passed' : 'failed';
   report.failed = failures;
@@ -166,7 +166,6 @@ try {
   await mkdir(path.join(root, 'docs/database/checks'), { recursive: true });
   await writeFile(path.join(root, 'docs/database/checks/api-stage2-report.json'), JSON.stringify(report, null, 2) + '\n');
   const passed = report.checks.filter(c => c.result === 'passed').length;
-  console.log(`${report.result.toUpperCase()}: ${passed}/${report.checks.length} РїСЂРѕРІРµСЂРѕРє`);
+  console.log(`${report.result.toUpperCase()}: ${passed}/${report.checks.length} проверок`);
   process.exitCode = report.result === 'passed' ? 0 : 1;
 }
-

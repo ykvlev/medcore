@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-30T19:13:02.524Z",
-  "api": "http://127.0.0.1:5180",
+  "checkedAt": "2026-10-30T20:57:54.950Z",
+  "api": "https://medcore-api-k0no.onrender.com",
   "result": "passed",
   "checks": [
     {
@@ -219,7 +219,8 @@
     {
       "name": "deputy_chief_physician: изменение структуры запрещено",
       "result": "passed",
-      "status": 403
+      "status": 403,
+      "hospitalId": 2
     },
     {
       "name": "minister_of_health: все 13 организаций",
@@ -239,12 +240,13 @@
     {
       "name": "chief_physician: случаи лечения доступны",
       "result": "passed",
+      "patientId": 213,
       "cases": 1
     },
     {
       "name": "карточка пациента: история содержит диагноз с кодом МКБ",
       "result": "passed",
-      "history": 2
+      "history": 3
     }
   ],
   "failed": []

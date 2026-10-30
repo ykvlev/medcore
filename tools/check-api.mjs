@@ -1,4 +1,4 @@
-﻿// End-to-end HTTP checks against the running local API and educational database.
+// End-to-end HTTP checks against the running local API and educational database.
 // Creates one explicitly marked patient, then removes only that test fixture.
 import { Client } from 'pg';
 import { randomUUID } from 'node:crypto';
@@ -9,7 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.loadEnvFile(path.join(root, '.env'));
 const base = process.env.MEDCORE_API_URL ?? 'http://127.0.0.1:5180';
 const report = { checkedAt: new Date().toISOString(), result: 'pending', checks: [], cleanup: 'not-needed', limitations: ['HTTP API checks; browser interaction is checked separately.', 'Hospitalization write operations and full coursework acceptance are not covered.'] };
-const marker = `РџСЂРѕРІРµСЂРєР°-${randomUUID().slice(0, 8)}`;
+const marker = `Проверка-${randomUUID().slice(0, 8)}`;
 const sessions = [];
 let fixtureId;
 let db;
@@ -47,8 +47,8 @@ try {
   const clinic = orgs.data?.items?.find(o => o.organizationType === 'polyclinic' && o.isActive);
   assert(!!clinic, 'registrar has an active authorized polyclinic');
   const created = await request('/api/patients', { cookie: registrar, method: 'POST', body: {
-    lastName: marker, firstName: 'РЈС‡РµР±РЅС‹Р№', middleName: null, birthDate: '1997-06-15', sex: 'unknown',
-    phone: '+7 (000) 000-00-01', email: null, address: 'Р’С‹РјС‹С€Р»РµРЅРЅС‹Р№ Р°РґСЂРµСЃ РїСЂРѕРІРµСЂРєРё API', polyclinicId: clinic.id,
+    lastName: marker, firstName: 'Учебный', middleName: null, birthDate: '1997-06-15', sex: 'unknown',
+    phone: '+7 (000) 000-00-01', email: null, address: 'Вымышленный адрес проверки API', polyclinicId: clinic.id,
   } });
   fixtureId = created.data?.id ?? created.data?.patient?.id;
   assert(created.status === 201 && !!fixtureId, 'TC-01 API: patient registration succeeds', { status: created.status });
@@ -56,7 +56,7 @@ try {
   assert(card.status === 200 && card.data.patient.lastName === marker, 'new patient is readable after registration');
   const search = await request(`/api/patients?search=${encodeURIComponent(marker)}&page=1&pageSize=15`, { cookie: registrar });
   assert(search.status === 200 && search.data.total === 1 && search.data.items[0].id === fixtureId, 'TC-03 API: search finds the registered patient');
-  const contacts = { phone: '+7 (000) 000-00-02', email: 'api-check@example.test', address: 'РћР±РЅРѕРІР»С‘РЅРЅС‹Р№ РІС‹РјС‹С€Р»РµРЅРЅС‹Р№ Р°РґСЂРµСЃ', version: card.data.patient.version };
+  const contacts = { phone: '+7 (000) 000-00-02', email: 'api-check@example.test', address: 'Обновлённый вымышленный адрес', version: card.data.patient.version };
   const updated = await request(`/api/patients/${fixtureId}`, { cookie: registrar, method: 'PUT', body: contacts });
   assert([200, 204].includes(updated.status), 'TC-02 API: authorized contacts update succeeds');
   const changed = await request(`/api/patients/${fixtureId}`, { cookie: registrar });
@@ -66,8 +66,8 @@ try {
   const denied = await request(`/api/patients/${fixtureId}/diagnoses`, { cookie: registrar, method: 'POST', body: { caseId: 1, diagnosisId: 1, isPrimary: false, note: 'Access rejection test' } });
   assert(denied.status === 403, 'TC-05 API: registrar cannot create a diagnosis', { status: denied.status });
 
-  // РџСЂСЏРјР°СЏ СЃРІРµСЂРєР° РёРґС‘С‚ РІ С‚Сѓ Р¶Рµ Р±Р°Р·Сѓ, С‡С‚Рѕ Рё API: РґР»СЏ РІРЅРµС€РЅРµРіРѕ СЃС‚РµРЅРґР° Р°РґСЂРµСЃ
-  // РїРµСЂРµРґР°С‘С‚СЃСЏ С‡РµСЂРµР· MEDCORE_DATABASE_URL, РёРЅР°С‡Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ PG* РёР· .env.
+  // Прямая сверка идёт в ту же базу, что и API: для внешнего стенда адрес
+  // передаётся через MEDCORE_DATABASE_URL, иначе используются PG* из .env.
   db = new Client(process.env.MEDCORE_DATABASE_URL
     ? { connectionString: process.env.MEDCORE_DATABASE_URL, ssl: /sslmode=disable/.test(process.env.MEDCORE_DATABASE_URL) ? false : { rejectUnauthorized: false }, connectionTimeoutMillis: 12000, statement_timeout: 10000 }
     : { ssl: process.env.PGSSLMODE === 'disable' ? false : { rejectUnauthorized: true }, connectionTimeoutMillis: 12000, statement_timeout: 10000 });
@@ -115,4 +115,3 @@ try {
   console.log(`${report.result.toUpperCase()}: ${report.checks.length} checks, fixture cleanup ${report.cleanup}`);
   process.exitCode = report.result === 'passed' ? 0 : 1;
 }
-
