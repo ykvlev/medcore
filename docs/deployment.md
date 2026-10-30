@@ -23,6 +23,16 @@ Vercel не исполняет .NET, поэтому на нём размещае
 
 ## 1. Репозиторий
 
+Сборка целиком (сервер и клиент):
+
+```powershell
+pnpm install --frozen-lockfile
+pnpm build
+node tools/check-api.mjs   # при запущенном API
+```
+
+Публикация кода:
+
 ```powershell
 git init
 git add .

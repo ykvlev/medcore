@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:database": "node tools/check-database.mjs"
+    "test:database": "node tools/check-database.mjs",
+    "build": "node tools/build-all.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.3.14",
