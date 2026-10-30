@@ -46,9 +46,9 @@ node tools/run-dev.mjs             # сервер http://127.0.0.1:5180 и кл�
 
 ## Размещение
 
-Демонстрационный стенд: клиент — https://medcore-ebon.vercel.app, API — https://medcore-api-k0no.onrender.com, база — Neon. Клиент собирается в статику и размещается на Vercel (`frontend/vercel.json`), сервер — в контейнере `backend/Dockerfile`, база — во внешнем PostgreSQL. Пошаговая инструкция: [docs/deployment.md](docs/deployment.md).
+Демонстрационный стенд: **https://89-104-65-61.sslip.io** — собственный сервер (Ubuntu 22.04, Docker Compose: PostgreSQL 18, ASP.NET Core API, Caddy с автоматическим HTTPS). Клиент и API на одном домене, база доступна только внутри Docker-сети.
 
-Бесплатный тариф Render останавливает сервис после простоя: первый запрос после паузы может идти 40–60 секунд.
+Ранее использовалась схема Vercel → Render → Neon; её конфигурация сохранена как резервная (`frontend/vercel.json`, `render.yaml`, `backend/Dockerfile`). Пошаговая инструкция: [docs/deployment.md](docs/deployment.md).
 
 ## Состояние
 

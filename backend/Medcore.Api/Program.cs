@@ -5,12 +5,21 @@ using Medcore.Application;
 using Medcore.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
+// За обратным прокси (Caddy) реальные схема и адрес клиента приходят в заголовках:
+// без этого cookie не помечается Secure, а ограничение входа считает всех одним IP.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 // Render и подобные хостинги передают порт в PORT; локально остаётся 5180.
 var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 if (string.IsNullOrEmpty(configuredUrls))
@@ -25,6 +34,11 @@ if (string.IsNullOrWhiteSpace(connectionString) && !string.IsNullOrWhiteSpace(da
 {
     var uri = new Uri(databaseUrl);
     var credentials = uri.UserInfo.Split(':', 2);
+    // Управляемые PostgreSQL (Neon) требуют SSL, локальный контейнер — нет.
+    var urlSslMode = uri.Query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries)
+        .Select(pair => pair.Split('=', 2))
+        .FirstOrDefault(pair => pair[0].Equals("sslmode", StringComparison.OrdinalIgnoreCase))
+        ?.ElementAtOrDefault(1)?.ToLowerInvariant();
     var fromUrl = new NpgsqlConnectionStringBuilder
     {
         Host = uri.Host,
@@ -32,7 +46,14 @@ if (string.IsNullOrWhiteSpace(connectionString) && !string.IsNullOrWhiteSpace(da
         Database = uri.AbsolutePath.Trim('/'),
         Username = Uri.UnescapeDataString(credentials[0]),
         Password = credentials.Length > 1 ? Uri.UnescapeDataString(credentials[1]) : string.Empty,
-        SslMode = SslMode.Require,
+        SslMode = urlSslMode switch
+        {
+            "disable" => SslMode.Disable,
+            "prefer" => SslMode.Prefer,
+            "verify-ca" => SslMode.VerifyCA,
+            "verify-full" => SslMode.VerifyFull,
+            _ => SslMode.Require
+        },
         SearchPath = "project,public",
         Timezone = "Europe/Moscow",
         Timeout = 15,
@@ -113,6 +134,7 @@ builder.Services.AddRateLimiter(options =>
 });
 
 var app = builder.Build();
+app.UseForwardedHeaders();
 app.UseResponseCompression();
 app.UseExceptionHandler(errorApp => errorApp.Run(async context =>
 {

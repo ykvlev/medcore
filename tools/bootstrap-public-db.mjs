@@ -12,7 +12,9 @@ import { Client } from 'pg';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 try { process.loadEnvFile(path.join(root, '.env')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
 
-const url = process.env.DATABASE_URL ?? process.env.PUBLIC_DATABASE_URL;
+// Основная переменная — DATABASE_URL; PUBLIC_DATABASE_URL позволяет указать
+// отдельную цель (например, туннель к серверу) поверх локального .env.
+const url = process.env.PUBLIC_DATABASE_URL ?? process.env.DATABASE_URL;
 if (!url) throw new Error('Задайте DATABASE_URL внешней базы PostgreSQL');
 const password = process.env.MEDCORE_DEMO_PASSWORD;
 if (!password || password.length < 12) throw new Error('Задайте MEDCORE_DEMO_PASSWORD (не короче 12 символов)');
