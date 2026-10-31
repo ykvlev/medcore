@@ -1,0 +1,61 @@
+/* Остатки и заказы на снабжение. */
+.supplies-tabs-row { margin-bottom: 18px; }
+.supplies-panel { overflow: hidden; }
+.supplies-panel .data-table { min-width: 740px; }
+.supplies-panel > .panel-heading { padding: 22px 23px 16px; border-bottom: 1px solid rgba(255, 255, 255, .05); }
+.supplies-panel > .panel-heading .button { min-height: 33px; padding: 8px 12px; font-size: 10px; }
+
+.supplies-deficit-note {
+  display: flex; align-items: center; gap: 11px; padding: 11px 22px;
+  border-bottom: 1px solid rgba(242, 182, 109, .12); background: rgba(242, 182, 109, .045);
+  color: #d9b78a; font-size: 10px; line-height: 1.6;
+}
+.supplies-deficit-note > svg { color: #d9a765; flex-shrink: 0; }
+.supplies-deficit-note > span { flex: 1; min-width: 0; }
+.supplies-deficit-note strong { color: #eccb9e; font-weight: 550; }
+.supplies-deficit-note .button { min-height: 29px; padding: 5px 9px; font-size: 9.5px; flex-shrink: 0; color: #e0bd88; }
+
+.stock-quantity { font-variant-numeric: tabular-nums; color: #c1d0df; }
+.stock-low { color: #f0a1a6; }
+.stock-deficit {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; border-radius: 6px;
+  border: 1px solid rgba(240, 113, 120, .14); background: rgba(240, 113, 120, .055);
+  color: #e8a0a6; font-size: 9px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+
+.badge-ordered { color: #e0bd88; border-color: rgba(242, 182, 109, .14); background: rgba(242, 182, 109, .06); }
+.badge-received { color: #80c8af; border-color: rgba(91, 214, 177, .1); background: rgba(91, 214, 177, .065); }
+.supply-order-sum { font-weight: 500; color: #d5dfec; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.supply-receive { min-height: 28px; padding: 5px 10px; font-size: 9.5px; }
+
+.supply-form .form-grid { gap: 18px; }
+.supply-form .form-section-next { margin-top: 25px; }
+.supply-lines { display: flex; flex-direction: column; gap: 11px; }
+.supply-line {
+  display: grid; grid-template-columns: minmax(0, 1.6fr) 105px 120px 30px; gap: 10px;
+  align-items: end; padding: 12px 13px; border: 1px solid rgba(255, 255, 255, .055);
+  border-radius: 11px; background: rgba(13, 19, 26, .28);
+}
+.supply-line .field { gap: 6px; }
+.supply-line .field label { font-size: 9px; }
+.supply-line .field input, .supply-line .field select { height: 36px; font-size: 11px; }
+.supply-line-remove { margin-bottom: 3px; }
+.supply-lines-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; }
+.supply-lines-foot .button { min-height: 32px; padding: 7px 11px; font-size: 10px; }
+.supply-order-total { font-size: 10px; color: #8c9eb2; white-space: nowrap; }
+.supply-order-total strong { font-size: 13px; font-weight: 500; color: #d5e6ee; margin-left: 7px; font-variant-numeric: tabular-nums; }
+.supply-form-hint { margin-top: 12px; }
+
+@media (max-width: 1180px) {
+  .supply-line { grid-template-columns: minmax(0, 1.4fr) 100px 110px 30px; }
+}
+@media (max-width: 700px) {
+  .supplies-panel > .panel-heading { padding: 18px 16px 14px; }
+  .supplies-deficit-note { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+  .supplies-deficit-note .button { margin-left: 26px; }
+  .supply-line { grid-template-columns: 1fr 1fr; align-items: end; }
+  .supply-line-item { grid-column: 1 / -1; }
+  .supply-line-remove { grid-column: 2; justify-self: end; }
+  .supply-lines-foot { flex-direction: column; align-items: stretch; }
+  .supply-order-total { text-align: right; }
+}

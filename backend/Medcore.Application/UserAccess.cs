@@ -22,6 +22,19 @@ public static class AccessPolicies
 
     private static readonly string[] ReportManagerRoles = ["organization_admin", "analyst"];
 
+    // Снабжение: остатки и заказы читают управленческие роли учреждения; заказ
+    // оформляет и принимает администратор организации, главный врач и заместитель.
+    private static readonly string[] SupplyReadRoles =
+        ["organization_admin", "chief_physician", "deputy_chief_physician", "head_of_department"];
+
+    private static readonly string[] SupplyManagerRoles =
+        ["organization_admin", "chief_physician", "deputy_chief_physician"];
+
+    // Перевозки: оформляет и ведёт регистратор, врач и управленческие роли; заведующий
+    // отделением только читает, как и в остальных больничных разделах.
+    private static readonly string[] TransportManagerRoles =
+        ["organization_admin", "chief_physician", "deputy_chief_physician"];
+
     // Больничные роли читают пациентов только в области своей больницы.
     public static bool IsHospitalReader(UserAccess user) =>
         HospitalReadRoles.Any(user.HasRole);
@@ -74,4 +87,64 @@ public static class AccessPolicies
     // Область отделения для статистики заведующего; NULL для остальных ролей.
     public static long? DepartmentScope(UserAccess user) =>
         user.HasRole("head_of_department") ? user.DepartmentId : null;
+
+    // ---------- Направления к специалистам (миграция 007) ----------
+
+    // Список направлений доступен регистратору своей организации, врачу по своим
+    // случаям и больничным ролям в области своей больницы.
+    public static bool CanReadReferrals(UserAccess user) =>
+        user.HasRole("registrar") || (user.HasRole("doctor") && user.EmployeeId.HasValue)
+        || IsHospitalReader(user);
+
+    // Оформляет направление врач по своим случаям, регистратор по своей организации
+    // и больничные роли (главный врач, заместитель, заведующий) по своей больнице.
+    public static bool CanCreateReferral(UserAccess user) =>
+        user.HasRole("registrar") || (user.HasRole("doctor") && user.EmployeeId.HasValue)
+        || IsHospitalReader(user);
+
+    // Статус меняет врач случая, регистратор организации и главный врач с заместителем;
+    // заведующий отделением попадает в больничные роли наравне с ними.
+    public static bool CanChangeReferralStatus(UserAccess user) =>
+        user.HasRole("registrar") || (user.HasRole("doctor") && user.EmployeeId.HasValue)
+        || IsHospitalReader(user);
+
+    // Область направлений: организации регистратора и больницы больничных ролей.
+    public static long[] ReferralOrganizationIds(UserAccess user) =>
+        user.OrganizationIdsFor("registrar").Concat(HospitalReadOrganizationIds(user)).Distinct().ToArray();
+
+    // ---------- Снабжение (миграция 007) ----------
+
+    public static bool CanReadSupplies(UserAccess user) => SupplyReadRoles.Any(user.HasRole);
+
+    public static bool CanManageSupplyOrders(UserAccess user) => SupplyManagerRoles.Any(user.HasRole);
+
+    // Организации снабжения в порядке приоритета роли: администратор, главный врач,
+    // заместитель, заведующий отделением.
+    public static long[] SupplyOrganizationIds(UserAccess user) =>
+        SupplyReadRoles.SelectMany(user.OrganizationIdsFor).Distinct().ToArray();
+
+    public static long[] SupplyManagerOrganizationIds(UserAccess user) =>
+        SupplyManagerRoles.SelectMany(user.OrganizationIdsFor).Distinct().ToArray();
+
+    // ---------- Транспортировка пациентов (миграция 007) ----------
+
+    public static bool CanReadTransports(UserAccess user) =>
+        user.HasRole("registrar") || (user.HasRole("doctor") && user.EmployeeId.HasValue)
+        || user.HasRole("organization_admin") || IsHospitalReader(user);
+
+    public static bool CanCreateTransport(UserAccess user) =>
+        user.HasRole("registrar") || (user.HasRole("doctor") && user.EmployeeId.HasValue)
+        || TransportManagerRoles.Any(user.HasRole);
+
+    // Ведёт перевозку регистратор и управленческие роли; врач и заведующий отделением
+    // оформляют и читают, но статус не меняют.
+    public static bool CanUpdateTransport(UserAccess user) =>
+        user.HasRole("registrar") || TransportManagerRoles.Any(user.HasRole);
+
+    public static long[] TransportOrganizationIds(UserAccess user) =>
+        user.OrganizationIdsFor("registrar").Concat(ManagerOrganizationIds(user)).Distinct().ToArray();
+
+    public static long[] TransportEditOrganizationIds(UserAccess user) =>
+        user.OrganizationIdsFor("registrar")
+            .Concat(TransportManagerRoles.SelectMany(user.OrganizationIdsFor)).Distinct().ToArray();
 }

@@ -71,15 +71,6 @@ public static class HospitalizationEndpoints
             await store.DischargeHospitalizationAsync(Access(context), id, request, context.TraceIdentifier, ct);
             return Results.NoContent();
         }).WithSummary("Выписка из стационара");
-
-        api.MapPost("/referrals", async (CreateReferralRequest request, HttpContext context, MedcoreStore store,
-            CancellationToken ct) =>
-        {
-            var errors = RequestValidation.Errors(request);
-            if (errors.Count > 0) return Results.ValidationProblem(errors, title: "Проверьте данные направления");
-            var id = await store.CreateReferralAsync(Access(context), request, context.TraceIdentifier, ct);
-            return Results.Created($"/api/referrals/{id}", new { id });
-        }).WithSummary("Направление на госпитализацию");
     }
 
     private static UserAccess Access(HttpContext context) =>

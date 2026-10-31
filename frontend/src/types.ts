@@ -149,3 +149,77 @@ export interface ReportTable {
   totals: { rowCount: number };
 }
 
+// Этап 3. Направления, снабжение и транспортировка (миграция 007).
+export type ReferralType = 'hospitalization' | 'consultation' | 'diagnostic';
+/** Строка списка направлений пациента: GET /referrals?patientId= или /patients/{id}/referrals. */
+export interface ReferralRow {
+  id: number;
+  patientId: number | null;
+  patientName: string | null;
+  type: ReferralType;
+  hospitalId: number | null;
+  hospitalName: string;
+  specializationId: number | null;
+  specializationName: string;
+  doctorId: number | null;
+  doctorName: string | null;
+  status: string;
+  issuedAt: string;
+  validUntil: string | null;
+  reason: string | null;
+}
+export type SupplyCategory = 'medicine' | 'consumable';
+/** Остаток на складе организации: GET /supplies. */
+export interface SupplyRow {
+  id: number;
+  code: string;
+  name: string;
+  category: SupplyCategory | string;
+  unit: string;
+  quantity: number;
+  minQuantity: number;
+  deficit: number;
+  organizationName: string | null;
+}
+/** Позиция заказа на снабжение. */
+export interface SupplyOrderItemRow {
+  id: number;
+  itemId: number;
+  name: string;
+  unit: string;
+  quantity: number;
+  unitPrice: number;
+}
+/** Заказ на снабжение: GET /supply-orders. */
+export interface SupplyOrderRow {
+  id: number;
+  supplier: string;
+  status: string;
+  orderedAt: string;
+  expectedAt: string | null;
+  receivedAt: string | null;
+  itemCount: number;
+  total: number;
+  organizationName: string | null;
+  items: SupplyOrderItemRow[];
+  note: string | null;
+}
+/** Перевозка пациента между учреждениями: GET /transports. */
+export interface TransportRow {
+  id: number;
+  patientId: number;
+  patientName: string;
+  fromOrganizationId: number | null;
+  fromOrganizationName: string;
+  toOrganizationId: number | null;
+  toOrganizationName: string;
+  status: string;
+  reason: string;
+  requestedAt: string;
+  startedAt: string | null;
+  completedAt: string | null;
+  vehicle: string | null;
+  accompanyingEmployeeId: number | null;
+  accompanyingName: string | null;
+}
+

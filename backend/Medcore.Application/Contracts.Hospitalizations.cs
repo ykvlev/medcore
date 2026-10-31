@@ -24,11 +24,7 @@ public sealed record ChangeAttendingPhysicianRequest(
 
 public sealed record DischargeHospitalizationRequest(DateTimeOffset DischargedAt);
 
-public sealed record CreateReferralRequest(
-    [property: Range(1, long.MaxValue)] long CaseId,
-    [property: Range(1, long.MaxValue)] long HospitalId,
-    [property: Range(1, long.MaxValue)] long SpecializationId,
-    [property: StringLength(2000)] string? Note);
+// Направление оформляется маршрутом POST /api/referrals (см. Contracts.Referrals.cs).
 
 // Строка списка госпитализаций: текущее размещение и текущий лечащий врач выводятся
 // по последним интервалам, отделение — по койке (department_id — отделение поступления).

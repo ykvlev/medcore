@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Activity, Building2, CalendarDays, ChartNoAxesCombined, ChevronDown, HeartPulse, LayoutDashboard, LogOut, Microscope, ShieldCheck, Stethoscope, Users, BedDouble } from 'lucide-react';
+import { Activity, Ambulance, Boxes, Building2, CalendarDays, ChartNoAxesCombined, ChevronDown, HeartPulse, LayoutDashboard, LogOut, Microscope, ShieldCheck, Stethoscope, Users, BedDouble } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useAuth } from '../auth';
 import { errorMessage } from '../api';
@@ -14,6 +14,8 @@ const navigation = [
   { to: '/employees', label: 'Персонал', icon: Stethoscope, roles: ['organization_admin', 'doctor', 'registrar', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
   { to: '/patients', label: 'Пациенты', icon: Users, roles: ['doctor', 'registrar', 'chief_physician', 'deputy_chief_physician'] as Role[] },
   { to: '/hospitalizations', label: 'Стационар', icon: BedDouble, roles: ['organization_admin', 'doctor', 'registrar', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
+  { to: '/supplies', label: 'Снабжение', icon: Boxes, roles: ['organization_admin', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
+  { to: '/transports', label: 'Транспортировка', icon: Ambulance, roles: ['registrar', 'doctor', 'organization_admin', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
   { to: '/laboratories', label: 'Лаборатории', icon: Microscope, roles: ['lab_staff', 'organization_admin', 'analyst', 'doctor'] as Role[] },
   { to: '/reports', label: 'Отчёты', icon: ChartNoAxesCombined, roles: ['organization_admin', 'analyst', 'chief_physician', 'deputy_chief_physician', 'head_of_department', 'minister_of_health', 'governor'] as Role[] },
   { to: '/admin', label: 'Администрирование', icon: ShieldCheck, roles: ['system_admin'] as Role[] },

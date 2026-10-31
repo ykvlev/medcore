@@ -761,55 +761,8 @@ public sealed partial class MedcoreStore
     }
 
     // ---------- Направление ----------
-
-    public async Task<long> CreateReferralAsync(UserAccess access, CreateReferralRequest request,
-        string requestId, CancellationToken cancellationToken)
-    {
-        RequireHospitalDoctor(access);
-        var parameters = AccessParameters(access);
-        parameters["case"] = request.CaseId;
-        parameters["hospital"] = request.HospitalId;
-        parameters["specialization"] = request.SpecializationId;
-        parameters["reason"] = string.IsNullOrWhiteSpace(request.Note)
-            ? "Направление на госпитализацию" : request.Note.Trim();
-        var cases = await RowsAsync($"""
-            SELECT c.id, c.status FROM project.medical_cases c
-            WHERE c.id = @case AND ({CareCaseSql})
-            """, parameters, cancellationToken);
-        if (cases.Count == 0) throw new ApplicationFault(404, "Медицинский случай не найден в доступной области");
-        if ((string)cases[0]["status"]! == "cancelled")
-            throw new ApplicationFault(409, "По отменённому случаю направление не оформляется");
-        var hospitals = await RowsAsync("""
-            SELECT h.organization_id FROM project.hospitals h
-            JOIN project.medical_organizations o ON o.id = h.organization_id
-            WHERE h.organization_id = @hospital AND o.is_active
-            """, parameters, cancellationToken);
-        if (hospitals.Count == 0) throw new ApplicationFault(404, "Больница назначения не найдена или неактивна");
-        if (await RowsAsync("SELECT 1 FROM project.department_specializations WHERE id = @specialization",
-                parameters, cancellationToken) is { Count: 0 })
-            throw new ApplicationFault(404, "Специализация направления не найдена");
-
-        await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
-        await using var transaction = await connection.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
-        await SetAuditContext(connection, transaction, access, requestId, cancellationToken);
-        try
-        {
-            var id = await TxScalarAsync(connection, transaction, """
-                INSERT INTO project.referrals(case_id, referring_doctor_id, target_hospital_id,
-                    specialization_id, reason, status)
-                VALUES (@case, @employee, @hospital, @specialization, @reason, 'issued')
-                RETURNING id
-                """, parameters, cancellationToken);
-            await HospitalAuditAsync(connection, transaction, access.UserId, "insert", "referral", id, requestId,
-                ["case_id", "target_hospital_id", "specialization_id"], cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-            return id;
-        }
-        catch (PostgresException error)
-        {
-            throw HospitalWriteFault(error);
-        }
-    }
+    // Оформление и смена статуса направления живут в ReferralStore.cs: маршрут общий
+    // для врача и регистратора, а поля направления расширены миграцией 007.
 
     // ---------- Общие проверки записи ----------
 
