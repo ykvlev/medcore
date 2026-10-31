@@ -147,4 +147,64 @@ public static class AccessPolicies
     public static long[] TransportEditOrganizationIds(UserAccess user) =>
         user.OrganizationIdsFor("registrar")
             .Concat(TransportManagerRoles.SelectMany(user.OrganizationIdsFor)).Distinct().ToArray();
+
+    // ---------- Расписание и приём (миграция 008) ----------
+
+    // Талон, запись и расписание читают регистратор, врач и управленческие роли
+    // учреждения; заведующий отделением только читает, как и в остальных разделах.
+    private static readonly string[] AppointmentReaderRoles =
+    [
+        "registrar", "doctor", "organization_admin", "chief_physician", "deputy_chief_physician",
+        "head_of_department"
+    ];
+
+    // Запись на талон и смену статуса выполняют регистратор, врач и управленческие роли.
+    private static readonly string[] AppointmentManagerRoles =
+        ["registrar", "doctor", "organization_admin", "chief_physician", "deputy_chief_physician"];
+
+    // Расписание создаёт и отменяет администратор организации, главный врач и заместитель.
+    private static readonly string[] ScheduleManagerRoles =
+        ["organization_admin", "chief_physician", "deputy_chief_physician"];
+
+    public static bool CanReadSlots(UserAccess user) => AppointmentReaderRoles.Any(user.HasRole);
+
+    public static bool CanReadAppointments(UserAccess user) => AppointmentReaderRoles.Any(user.HasRole);
+
+    public static bool CanReadSchedules(UserAccess user) => AppointmentReaderRoles.Any(user.HasRole);
+
+    public static bool CanBookAppointment(UserAccess user) => AppointmentManagerRoles.Any(user.HasRole);
+
+    public static bool CanChangeAppointmentStatus(UserAccess user) =>
+        AppointmentManagerRoles.Any(user.HasRole);
+
+    public static bool CanManageSchedules(UserAccess user) => ScheduleManagerRoles.Any(user.HasRole);
+
+    // Область приёма: организации регистратора и врача плюс учреждения управленческих
+    // ролей; заведующий отделением попадает в неё через свою больницу.
+    public static long[] AppointmentOrganizationIds(UserAccess user) =>
+        user.OrganizationIdsFor("registrar").Concat(user.OrganizationIdsFor("doctor"))
+            .Concat(ManagerOrganizationIds(user)).Distinct().ToArray();
+
+    // Запись и смена статуса — без заведующего отделением: он только читает.
+    public static long[] AppointmentManagerOrganizationIds(UserAccess user) =>
+        user.OrganizationIdsFor("registrar").Concat(user.OrganizationIdsFor("doctor"))
+            .Concat(ScheduleManagerRoles.SelectMany(user.OrganizationIdsFor)).Distinct().ToArray();
+
+    // Расписанием управляет администратор организации, главный врач и заместитель.
+    public static long[] ScheduleManagerOrganizationIds(UserAccess user) =>
+        ScheduleManagerRoles.SelectMany(user.OrganizationIdsFor).Distinct().ToArray();
+
+    // ---------- Закупки (миграция 008) ----------
+
+    // Финансовые данные закупок видят управленческие роли учреждения; заведующий
+    // отделением к договорам, тендерам и счетам не допускается.
+    private static readonly string[] ProcurementRoles =
+        ["organization_admin", "chief_physician", "deputy_chief_physician"];
+
+    public static bool CanReadProcurement(UserAccess user) => ProcurementRoles.Any(user.HasRole);
+
+    public static bool CanManageProcurement(UserAccess user) => ProcurementRoles.Any(user.HasRole);
+
+    public static long[] ProcurementOrganizationIds(UserAccess user) =>
+        ProcurementRoles.SelectMany(user.OrganizationIdsFor).Distinct().ToArray();
 }

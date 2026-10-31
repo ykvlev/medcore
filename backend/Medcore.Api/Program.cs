@@ -261,6 +261,8 @@ DiagnosisEndpoints.Map(api);
 ReferralEndpoints.Map(api);
 SupplyEndpoints.Map(api);
 TransportEndpoints.Map(api);
+AppointmentEndpoints.Map(api);
+ProcurementEndpoints.Map(api);
 AdminEndpoints.Map(api);
 ReportEndpoints.Map(api);
 app.Run();

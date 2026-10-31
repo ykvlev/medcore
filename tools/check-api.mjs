@@ -1,6 +1,9 @@
 // End-to-end HTTP checks against the running local API and educational database.
 // Creates one explicitly marked patient, then removes only that test fixture.
 import { Client } from 'pg';
+import net from 'node:net';
+// На части сетей авто-выбор семейства адресов в Node уходит в IPv6 и висит.
+net.setDefaultAutoSelectFamily(false);
 import { randomUUID } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';

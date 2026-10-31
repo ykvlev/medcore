@@ -2,6 +2,9 @@
 // лаборатории, администрирование, отчёты и экспорт. Только чтение и экспорт;
 // данные не изменяются. Отчёт: docs/database/checks/api-stage2-report.json.
 import { mkdir, writeFile } from 'node:fs/promises';
+import net from 'node:net';
+// На части сетей авто-выбор семейства адресов в Node уходит в IPv6 и висит.
+net.setDefaultAutoSelectFamily(false);
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 

@@ -1,11 +1,12 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Activity, Ambulance, Boxes, Building2, CalendarDays, ChartNoAxesCombined, ChevronDown, HeartPulse, LayoutDashboard, LogOut, Microscope, ShieldCheck, Stethoscope, Users, BedDouble } from 'lucide-react';
+import { Activity, Ambulance, Boxes, Building2, CalendarClock, CalendarDays, ChartNoAxesCombined, ChevronDown, HeartPulse, LayoutDashboard, LogOut, Microscope, ShieldCheck, ShoppingCart, Stethoscope, Users, BedDouble } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useAuth } from '../auth';
 import { errorMessage } from '../api';
 import { hasRole, initials, roleNames, workspaceScopeLabel } from '../format';
 import type { Role } from '../types';
 import { useToast } from './ui';
+import './Layout.css';
 
 const everyone: Role[] = ['system_admin', 'organization_admin', 'doctor', 'registrar', 'lab_staff', 'analyst', 'chief_physician', 'deputy_chief_physician', 'head_of_department', 'minister_of_health', 'governor'];
 const navigation = [
@@ -13,8 +14,10 @@ const navigation = [
   { to: '/organizations', label: 'Организации', icon: Building2, roles: everyone },
   { to: '/employees', label: 'Персонал', icon: Stethoscope, roles: ['organization_admin', 'doctor', 'registrar', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
   { to: '/patients', label: 'Пациенты', icon: Users, roles: ['doctor', 'registrar', 'chief_physician', 'deputy_chief_physician'] as Role[] },
+  { to: '/appointments', label: 'Приём', icon: CalendarClock, roles: ['registrar', 'doctor', 'organization_admin', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
   { to: '/hospitalizations', label: 'Стационар', icon: BedDouble, roles: ['organization_admin', 'doctor', 'registrar', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
   { to: '/supplies', label: 'Снабжение', icon: Boxes, roles: ['organization_admin', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
+  { to: '/procurement', label: 'Закупки', icon: ShoppingCart, roles: ['organization_admin', 'chief_physician', 'deputy_chief_physician'] as Role[] },
   { to: '/transports', label: 'Транспортировка', icon: Ambulance, roles: ['registrar', 'doctor', 'organization_admin', 'chief_physician', 'deputy_chief_physician', 'head_of_department'] as Role[] },
   { to: '/laboratories', label: 'Лаборатории', icon: Microscope, roles: ['lab_staff', 'organization_admin', 'analyst', 'doctor'] as Role[] },
   { to: '/reports', label: 'Отчёты', icon: ChartNoAxesCombined, roles: ['organization_admin', 'analyst', 'chief_physician', 'deputy_chief_physician', 'head_of_department', 'minister_of_health', 'governor'] as Role[] },

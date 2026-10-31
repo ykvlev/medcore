@@ -1,0 +1,215 @@
+/* Запись на приём: фильтры талонов, группы врачей и расписание смен. */
+
+.appointments-panel { overflow: hidden; }
+.appointments-panel .data-table { min-width: 940px; }
+.appointments-tabs-row { align-items: center; }
+
+/* --- Фильтры ------------------------------------------------------- */
+.appointments-filterbar {
+  display: grid;
+  grid-template-columns: minmax(165px, 1.35fr) minmax(160px, 1.25fr) minmax(135px, .9fr) minmax(135px, .9fr) auto;
+  align-items: end;
+  gap: 14px 16px;
+  padding: 20px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, .055);
+}
+.appointment-filter, .appointment-filter-date { min-width: 0; }
+.appointments-filterbar .field label { font-size: 9.5px; color: #8fa2b5; }
+.appointments-filterbar .field input,
+.appointments-filterbar .field select { height: 38px; font-size: 11px; }
+.appointment-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 9px;
+  background: rgba(13, 18, 24, .3);
+  color: #a7bacb;
+  font-size: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .18s, border-color .18s, color .18s;
+}
+.appointment-toggle:hover { border-color: rgba(91, 214, 177, .28); color: #c9e8dd; }
+.appointment-toggle input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--mint); cursor: pointer; }
+.appointment-toggle span { display: flex; align-items: center; gap: 6px; }
+.appointment-toggle svg { color: #7eb7a5; }
+
+.appointments-hint { display: flex; align-items: center; gap: 7px; font-size: 9.5px; color: #8195a9; line-height: 1.6; }
+.appointments-hint svg { color: #7eb7a5; flex-shrink: 0; }
+.appointments-range-error { display: flex; align-items: center; gap: 8px; margin: 13px 22px 0; font-size: 10px; }
+
+/* --- Талоны -------------------------------------------------------- */
+.slot-groups { display: flex; flex-direction: column; gap: 15px; padding: 18px 22px 22px; }
+.slot-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 18px 17px;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .017);
+  transition: border-color .18s, background .18s;
+}
+.slot-group:hover { border-color: rgba(255, 255, 255, .1); background: rgba(255, 255, 255, .026); }
+.slot-group-head { display: flex; align-items: center; gap: 12px; }
+.slot-doctor-avatar {
+  display: flex; align-items: center; justify-content: center;
+  width: 37px; height: 37px; flex-shrink: 0; border-radius: 11px;
+  background: linear-gradient(135deg, rgba(104, 139, 147, .24), rgba(114, 129, 171, .15));
+  border: 1px solid rgba(195, 220, 225, .07);
+  color: #a9c9ca;
+}
+.slot-group-title { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.slot-group-title strong { font-size: 12.5px; font-weight: 500; color: #dfe9f3; letter-spacing: -.1px; }
+.slot-group-title span { font-size: 9.5px; color: #8a9db1; line-height: 1.5; }
+.slot-cabinet {
+  display: inline-flex; align-items: center; gap: 5px; margin-left: auto; flex-shrink: 0;
+  padding: 5px 9px; border-radius: 7px;
+  border: 1px solid rgba(108, 157, 255, .12);
+  background: rgba(108, 157, 255, .05);
+  color: #9db4d8; font-size: 9px;
+}
+
+.slot-days { display: flex; flex-direction: column; gap: 9px; }
+.slot-day {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, .05);
+}
+.slot-day:first-child { padding-top: 0; border-top: 0; }
+.slot-day-label { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.slot-day-label strong { font-size: 10.5px; font-weight: 500; color: #bccbdb; white-space: nowrap; }
+.slot-day-label span { font-size: 8.5px; color: #788da1; }
+.slot-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.slot-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 64px;
+  padding: 6px 9px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-variant-numeric: tabular-nums;
+  transition: transform .16s, background .16s, border-color .16s, color .16s;
+}
+.slot-chip-time { font-size: 11px; font-weight: 520; letter-spacing: .2px; line-height: 1.2; }
+.slot-chip-state { font-size: 7.5px; letter-spacing: .15px; }
+.slot-chip-free {
+  border-color: rgba(91, 214, 177, .17);
+  background: rgba(91, 214, 177, .055);
+  color: #a9ddcc;
+  cursor: pointer;
+}
+.slot-chip-free:hover {
+  transform: translateY(-1px);
+  background: rgba(91, 214, 177, .13);
+  border-color: rgba(91, 214, 177, .36);
+  color: #d3f2e7;
+}
+.slot-chip-free:focus-visible { outline: 2px solid rgba(108, 157, 255, .5); outline-offset: 1px; }
+.slot-chip-free .slot-chip-state { color: #79b9a4; }
+.slot-chip-busy {
+  border-color: rgba(255, 255, 255, .045);
+  background: rgba(255, 255, 255, .012);
+  color: #74879a;
+  cursor: not-allowed;
+  opacity: .7;
+}
+.slot-chip-busy .slot-chip-time { text-decoration: line-through; text-decoration-color: rgba(196, 211, 226, .25); }
+.slot-chip-busy .slot-chip-state { color: #697c8f; }
+/* Свободный талон для роли только с правом просмотра. */
+.slot-chip-free:disabled { opacity: .62; cursor: default; }
+.slot-chip-free:disabled:hover { transform: none; background: rgba(91, 214, 177, .055); border-color: rgba(91, 214, 177, .17); color: #a9ddcc; }
+
+@media (max-width: 1180px) {
+  .appointments-filterbar { grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) 130px 130px; }
+  .appointment-toggle { grid-column: 1 / -1; justify-self: start; margin-top: 2px; }
+}
+@media (max-width: 900px) {
+  .appointments-filterbar { grid-template-columns: 1fr 1fr; }
+  .appointment-toggle { grid-column: auto; justify-self: stretch; justify-content: center; margin-top: 0; }
+  .slot-day { grid-template-columns: 128px minmax(0, 1fr); gap: 12px; }
+}
+@media (max-width: 700px) {
+  .appointments-filterbar { padding: 16px; grid-template-columns: 1fr; gap: 12px; }
+  .appointments-filterbar .field input,
+  .appointments-filterbar .field select { height: 36px; }
+  .slot-groups { padding: 14px 16px 18px; gap: 12px; }
+  .slot-group { padding: 14px; }
+  .slot-day { grid-template-columns: 1fr; gap: 7px; }
+  .slot-cabinet { margin-left: 0; }
+  .slot-group-head { flex-wrap: wrap; }
+  .slot-summary-number { display: none; }
+}
+
+/* --- Мои записи ---------------------------------------------------- */
+.appointment-when { display: flex; flex-direction: column; gap: 4px; }
+.appointment-when strong { font-size: 11px; font-weight: 500; color: #d2dfec; font-variant-numeric: tabular-nums; }
+.appointment-when span { font-size: 8.5px; color: #7f93a7; }
+.appointment-date-filter { display: flex; align-items: center; gap: 7px; }
+.appointment-date-filter label { font-size: 9px; color: #8498ac; white-space: nowrap; }
+.appointment-date-filter input {
+  height: 35px; padding: 0 10px;
+  background: rgba(12, 19, 27, .32);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 9px;
+  color: #c9d7e5; font-size: 10.5px;
+}
+.appointment-date-filter input:focus { border-color: rgba(108, 157, 255, .45); outline: none; }
+
+.button.appointment-complete { min-height: 29px; padding: 5px 9px; gap: 4px; font-size: 9px; }
+.button.appointment-cancel { min-height: 29px; padding: 5px 8px; gap: 4px; font-size: 9px; color: #d99ba0; }
+.button.appointment-cancel:hover:not(:disabled) { color: #f3c2c6; background: rgba(240, 113, 120, .08); }
+
+.badge-scheduled, .badge-booked, .badge-planned, .badge-confirmed {
+  color: #e0bd88; border-color: rgba(242, 182, 109, .14); background: rgba(242, 182, 109, .06);
+}
+.badge-no_show { color: #c39499; border-color: rgba(240, 113, 120, .12); background: rgba(240, 113, 120, .05); }
+.badge-inactive { color: #93a2b4; border-color: rgba(159, 174, 193, .1); background: rgba(139, 159, 183, .04); }
+
+/* --- Форма записи -------------------------------------------------- */
+.slot-summary {
+  display: flex; align-items: center; gap: 13px;
+  margin-bottom: 22px; padding: 14px;
+  border: 1px solid rgba(91, 214, 177, .1);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(91, 214, 177, .045), rgba(108, 157, 255, .03));
+}
+.slot-summary-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 39px; height: 39px; flex-shrink: 0; border-radius: 12px;
+  border: 1px solid rgba(91, 214, 177, .14);
+  background: rgba(91, 214, 177, .07);
+  color: #96d6c1;
+}
+.slot-summary-main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.slot-summary-main strong { font-size: 12.5px; font-weight: 500; color: #e0eaf4; line-height: 1.4; }
+.slot-summary-main > span { font-size: 9.5px; color: #8ea2b6; line-height: 1.5; }
+.slot-summary-when { display: flex; align-items: center; gap: 5px; color: #a4b8ca !important; }
+.slot-summary-when svg { color: #7fb3a2; flex-shrink: 0; }
+.slot-summary-number { margin-left: auto; align-self: flex-start; flex-shrink: 0; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, .07); background: rgba(10, 16, 23, .25); color: #7f95a9; font-size: 8.5px; }
+.appointment-form-grid { margin-top: 18px; }
+
+/* --- Расписание ---------------------------------------------------- */
+.schedule-time { font-size: 10px; color: #b6c7d8; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.schedule-slots { font-size: 9.5px; color: #8699ad; line-height: 1.5; }
+.schedule-slots strong { color: #9fd3c1; font-weight: 520; }
+.schedule-delete:hover:not(:disabled) { color: #e59a9f; background: rgba(240, 113, 120, .07); }
+.schedule-form-hint { margin-top: 17px; }
+.appointment-confirm-text { margin: 0 0 6px; font-size: 11px; line-height: 1.7; color: #a9bacb; }
+.button.appointment-delete-confirm { border-color: rgba(240, 113, 120, .24); background: rgba(240, 113, 120, .12); color: #f0b3b8; }
+.button.appointment-delete-confirm:hover:not(:disabled) { background: rgba(240, 113, 120, .18); color: #f7cdd1; }
+
+@media (max-width: 700px) {
+  .appointment-date-filter { width: 100%; justify-content: space-between; }
+  .appointment-date-filter input { flex: 1; }
+  .slot-summary { align-items: flex-start; }
+}

@@ -33,6 +33,16 @@ public static class TransportEndpoints
             await store.ChangeTransportStatusAsync(Access(context), id, request, context.TraceIdentifier, ct);
             return Results.NoContent();
         }).WithSummary("Смена статуса перевозки: requested → in_progress/completed/cancelled");
+
+        api.MapPut("/transports/{id:long}/route", async (long id, UpdateTransportRouteRequest request,
+            HttpContext context, MedcoreStore store, CancellationToken ct) =>
+        {
+            var errors = RequestValidation.Errors(request);
+            if (errors.Count > 0) return Results.ValidationProblem(errors,
+                statusCode: StatusCodes.Status422UnprocessableEntity, title: "Проверьте маршрут перевозки");
+            await store.UpdateTransportRouteAsync(Access(context), id, request, context.TraceIdentifier, ct);
+            return Results.NoContent();
+        }).WithSummary("Маршрут перевозки: пробег, одометр, топливо и 2–10 точек в jsonb");
     }
 
     private static UserAccess Access(HttpContext context) =>

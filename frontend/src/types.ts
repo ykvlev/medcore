@@ -221,5 +221,109 @@ export interface TransportRow {
   vehicle: string | null;
   accompanyingEmployeeId: number | null;
   accompanyingName: string | null;
+  /** Маршрут перевозки: пробег, одометр и топливо (PUT /transports/{id}/route). */
+  distanceKm: number | null;
+  odometerStart: number | null;
+  odometerEnd: number | null;
+  fuelLiters: number | null;
+  routePoints: RoutePoint[];
 }
+
+// Этап 4. Приём, расписание и закупки. Контракт: camelCase, списки в { items }.
+/** Талон на приём: GET /slots и GET /doctors/{id}/slots. */
+export interface AppointmentSlot {
+  id: number;
+  doctorId: number;
+  doctorName: string;
+  specializationId: number | null;
+  specializationName: string;
+  organizationId: number | null;
+  organizationName: string;
+  startsAt: string;
+  endsAt: string;
+  status: string;
+  cabinet: string | null;
+}
+/** Оформленная запись: GET /appointments. */
+export interface AppointmentRow {
+  id: number;
+  startsAt: string;
+  endsAt: string;
+  status: string;
+  patientId: number;
+  patientName: string;
+  doctorId: number;
+  doctorName: string;
+  specializationName: string;
+  organizationId: number | null;
+  organizationName: string;
+  cabinet: string | null;
+}
+/** Рабочее расписание врача: GET /schedules. */
+export interface ScheduleRow {
+  id: number;
+  doctorId: number;
+  doctorName: string;
+  organizationId: number | null;
+  organizationName: string;
+  workDate: string;
+  startTime: string;
+  endTime: string;
+  slotMinutes: number;
+  cabinet: string | null;
+  isActive: boolean;
+  slotsTotal: number;
+  slotsFree: number;
+}
+/** Поставщик закупок: GET /suppliers. */
+export interface SupplierRow {
+  id: number;
+  name: string;
+  inn: string | null;
+  contact: string | null;
+  isActive: boolean;
+}
+/** Договор с поставщиком: GET /contracts. */
+export interface ContractRow {
+  id: number;
+  number: string;
+  supplierId: number | null;
+  supplierName: string;
+  organizationId: number | null;
+  organizationName: string;
+  signedAt: string;
+  validUntil: string | null;
+  amount: number;
+  status: string;
+  invoicesCount: number;
+  paidAmount: number;
+}
+/** Тендер на закупку: GET /tenders. */
+export interface TenderRow {
+  id: number;
+  title: string;
+  organizationId: number | null;
+  organizationName: string;
+  announcedAt: string;
+  closesAt: string;
+  status: string;
+  budget: number;
+  winnerSupplierId: number | null;
+  winnerSupplierName: string | null;
+}
+/** Счёт по договору: GET /invoices. */
+export interface InvoiceRow {
+  id: number;
+  contractId: number | null;
+  contractNumber: string;
+  supplierName: string;
+  number: string;
+  issuedAt: string;
+  dueAt: string;
+  amount: number;
+  status: string;
+  paidAt: string | null;
+}
+/** Точка маршрута перевозки; подпись выводится на схеме. */
+export interface RoutePoint { lat: number; lng: number; label: string }
 

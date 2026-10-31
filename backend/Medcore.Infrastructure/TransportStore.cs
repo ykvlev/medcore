@@ -1,4 +1,6 @@
 using System.Data;
+using System.Globalization;
+using System.Text.Json;
 using Medcore.Application;
 using Npgsql;
 
@@ -6,11 +8,14 @@ namespace Medcore.Infrastructure;
 
 // Транспортировка пациента между учреждениями (миграция 007): реестр в области доступа,
 // оформление рейса от учреждения пользователя и смена статуса с проставлением
-// started_at/completed_at одним UPDATE.
+// started_at/completed_at одним UPDATE. Миграция 008 добавила маршрут, пробег, одометр
+// и топливо: их сохраняет PUT /api/transports/{id}/route, точки лежат в jsonb.
 public sealed partial class MedcoreStore
 {
     private static readonly string[] TransportStatuses =
         ["requested", "in_progress", "completed", "cancelled"];
+
+    private static readonly JsonSerializerOptions TransportRouteJson = new() { PropertyNameCaseInsensitive = true };
 
     private const string TransportSelectSql = """
         SELECT t.id, t.patient_id AS "patientId",
@@ -21,7 +26,10 @@ public sealed partial class MedcoreStore
             t.completed_at AS "completedAt", t.vehicle,
             t.accompanying_employee_id AS "accompanyingEmployeeId",
             nullif(concat_ws(' ', accompanying.last_name, accompanying.first_name, accompanying.middle_name), '')
-                AS "accompanyingName"
+                AS "accompanyingName",
+            t.distance_km AS "distanceKm", t.odometer_start AS "odometerStart",
+            t.odometer_end AS "odometerEnd", t.fuel_liters AS "fuelLiters",
+            t.route_points::text AS "routePoints"
         """;
 
     private const string TransportFromSql = """
@@ -44,13 +52,23 @@ public sealed partial class MedcoreStore
     private const string TransportEditPredicate =
         "(t.from_organization_id = ANY(@transport_edit_orgs) OR t.to_organization_id = ANY(@transport_edit_orgs))";
 
+    private static TransportRoutePoint[] TransportRouteRowPoints(object? value) =>
+        value is string text && text.Length > 0
+            ? JsonSerializer.Deserialize<TransportRoutePoint[]>(text, TransportRouteJson) ?? []
+            : [];
+
     private static TransportRow ToTransportRow(Dictionary<string, object?> row) => new(
         (long)row["id"]!, (long)row["patientId"]!, (string)row["patientName"]!,
         (long)row["fromOrganizationId"]!, (string)row["fromOrganizationName"]!,
         (long)row["toOrganizationId"]!, (string)row["toOrganizationName"]!,
         (string)row["status"]!, (string)row["reason"]!, HospitalTimestamp(row["requestedAt"]!),
         HospitalTimestampOrNull(row["startedAt"]), HospitalTimestampOrNull(row["completedAt"]),
-        row["vehicle"] as string, (long?)row["accompanyingEmployeeId"], row["accompanyingName"] as string);
+        row["vehicle"] as string, (long?)row["accompanyingEmployeeId"], row["accompanyingName"] as string,
+        row["distanceKm"] is null ? null : (decimal)row["distanceKm"]!,
+        row["odometerStart"] is null ? null : (int)row["odometerStart"]!,
+        row["odometerEnd"] is null ? null : (int)row["odometerEnd"]!,
+        row["fuelLiters"] is null ? null : (decimal)row["fuelLiters"]!,
+        TransportRouteRowPoints(row["routePoints"]));
 
     // ---------- Чтение ----------
 
@@ -220,6 +238,86 @@ public sealed partial class MedcoreStore
                 throw new ApplicationFault(404, "Перевозка не найдена");
             await HospitalAuditAsync(connection, transaction, access.UserId, "transport_status", "patient_transport",
                 id, requestId, ["status", "started_at", "completed_at"], cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch (PostgresException error)
+        {
+            throw HospitalWriteFault(error);
+        }
+    }
+
+    // ---------- Маршрут ----------
+
+    // PUT /api/transports/{id}/route: пробег, одометр, топливо и точки маршрута.
+    // Точки хранятся в jsonb как массив объектов {lat, lng, label}; проверки диапазонов
+    // дублируют ограничения схемы, чтобы клиент получал 422 с русским текстом.
+    public async Task UpdateTransportRouteAsync(UserAccess access, long id, UpdateTransportRouteRequest request,
+        string requestId, CancellationToken cancellationToken)
+    {
+        if (!AccessPolicies.CanUpdateTransport(access))
+            throw new ApplicationFault(403,
+                "Маршрут перевозки заполняет регистратор или управленческая роль учреждения");
+        if (request.DistanceKm is not { } distanceKm)
+            throw new ApplicationFault(422, "Укажите пробег маршрута");
+        if (distanceKm is < 0 or > 9_999_999.9m)
+            throw new ApplicationFault(422, "Пробег маршрута — от 0 до 9999999,9 км");
+        var fuel = request.FuelLiters;
+        if (fuel is < 0 or > 9_999_999.9m)
+            throw new ApplicationFault(422, "Объём топлива — от 0 до 9999999,9 л");
+        if (request.OdometerStart is < 0 || request.OdometerEnd is < 0)
+            throw new ApplicationFault(422, "Показание одометра не может быть отрицательным");
+        if (request.OdometerStart is { } odometerStart && request.OdometerEnd is { } odometerEnd
+            && odometerEnd < odometerStart)
+            throw new ApplicationFault(422, "Показание одометра в конце меньше начального");
+        var points = request.RoutePoints ?? [];
+        if (points.Length is < 2 or > 10)
+            throw new ApplicationFault(422, "Маршрут содержит от 2 до 10 точек");
+        foreach (var point in points)
+        {
+            if (double.IsNaN(point.Lat) || point.Lat is < -90 or > 90)
+                throw new ApplicationFault(422, "Широта точки маршрута — от -90 до 90");
+            if (double.IsNaN(point.Lng) || point.Lng is < -180 or > 180)
+                throw new ApplicationFault(422, "Долгота точки маршрута — от -180 до 180");
+            if (point.Label is { Length: > 200 })
+                throw new ApplicationFault(422, "Подпись точки маршрута длиннее 200 символов");
+        }
+        // jsonb собирается приложением и передаётся параметром: SQL остаётся параметризованным.
+        var routePoints = JsonSerializer.Serialize(points.Select(point => new
+        {
+            lat = point.Lat, lng = point.Lng, label = point.Label?.Trim()
+        }));
+        var parameters = AccessParameters(access);
+        parameters["transport_edit_orgs"] = AccessPolicies.TransportEditOrganizationIds(access);
+        parameters["id"] = id;
+        parameters["distance"] = distanceKm.ToString(CultureInfo.InvariantCulture);
+        parameters["fuel"] = fuel?.ToString(CultureInfo.InvariantCulture);
+        parameters["odometer_start"] = request.OdometerStart;
+        parameters["odometer_end"] = request.OdometerEnd;
+        parameters["route_points"] = routePoints;
+        await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+        await SetAuditContext(connection, transaction, access, requestId, cancellationToken);
+        try
+        {
+            if (await TxRowsAsync(connection, transaction, $"""
+                    SELECT t.id FROM project.patient_transports t
+                    WHERE t.id = @id AND {TransportEditPredicate}
+                    FOR UPDATE OF t
+                    """, parameters, cancellationToken) is { Count: 0 })
+                throw new ApplicationFault(404, "Перевозка не найдена в доступной области");
+            if (await TxExecuteAsync(connection, transaction, """
+                    UPDATE project.patient_transports
+                    SET distance_km = @distance::numeric(8, 1),
+                        route_points = @route_points::jsonb,
+                        odometer_start = @odometer_start::int,
+                        odometer_end = @odometer_end::int,
+                        fuel_liters = @fuel::numeric(8, 1)
+                    WHERE id = @id
+                    """, parameters, cancellationToken) == 0)
+                throw new ApplicationFault(404, "Перевозка не найдена");
+            await HospitalAuditAsync(connection, transaction, access.UserId, "transport_route", "patient_transport",
+                id, requestId, ["distance_km", "route_points", "odometer_start", "odometer_end", "fuel_liters"],
+                cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         }
         catch (PostgresException error)

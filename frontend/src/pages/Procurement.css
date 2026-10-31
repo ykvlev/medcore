@@ -1,0 +1,101 @@
+/* Закупки: договоры, тендеры, счета и поставщики. */
+
+.procurement-panel { overflow: hidden; }
+.procurement-panel .data-table { min-width: 1040px; }
+.procurement-tabs-row { align-items: center; }
+
+.procurement-status-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 37px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, .075);
+  border-radius: 9px;
+  background: rgba(13, 18, 24, .3);
+  transition: border-color .18s;
+}
+.procurement-status-filter:focus-within { border-color: rgba(108, 157, 255, .4); }
+.procurement-status-filter label { font-size: 9px; color: #7f92a5; white-space: nowrap; }
+.procurement-status-filter select {
+  height: 35px;
+  min-width: 132px;
+  max-width: 210px;
+  border: 0;
+  background: transparent;
+  color: #c3d2e2;
+  font-size: 10px;
+  outline: none;
+}
+.procurement-status-filter select option { background: #222c36; }
+
+.procurement-money { font-size: 10.5px; font-weight: 500; color: #d6e1ed; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.procurement-count { font-size: 10px; color: #a9bacb; font-variant-numeric: tabular-nums; }
+.procurement-paid { font-size: 10px; color: #9fb0c1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.procurement-paid-full { color: #9fd3c1; }
+.procurement-due { font-size: 9.5px; color: #a4b6c8; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.procurement-overdue { color: #e59a9f; }
+
+.button.procurement-action { min-height: 29px; padding: 5px 9px; gap: 4px; font-size: 9px; white-space: nowrap; }
+.button.procurement-award { color: #9fd3c1; }
+.button.procurement-award:hover:not(:disabled) { color: #c9eee2; background: rgba(91, 214, 177, .08); }
+
+/* --- Статусы -------------------------------------------------------- */
+.badge-signed, .badge-issued { color: #97acd1; background: rgba(108, 157, 255, .06); border-color: rgba(108, 157, 255, .1); }
+.badge-closed, .badge-draft, .badge-terminated, .badge-inactive { color: #93a2b4; border-color: rgba(159, 174, 193, .1); background: rgba(139, 159, 183, .04); }
+.badge-expired, .badge-overdue { color: #c39499; border-color: rgba(240, 113, 120, .12); background: rgba(240, 113, 120, .05); }
+.badge-announced { color: #9fb6d9; border-color: rgba(108, 157, 255, .12); background: rgba(108, 157, 255, .055); }
+.badge-evaluating, .badge-pending { color: #e0bd88; border-color: rgba(242, 182, 109, .14); background: rgba(242, 182, 109, .06); }
+.badge-awarded, .badge-paid { color: #80c8af; border-color: rgba(91, 214, 177, .12); background: rgba(91, 214, 177, .06); }
+
+/* --- Формы --------------------------------------------------------- */
+.procurement-form .form-grid { gap: 18px; }
+.procurement-form-hint { margin-top: 16px; line-height: 1.6; }
+.procurement-form .field textarea {
+  width: 100%;
+  min-height: 78px;
+  padding: 10px 12px;
+  resize: vertical;
+  background: rgba(12, 19, 27, .32);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 9px;
+  color: #d4e1ed;
+  font-size: 12px;
+  line-height: 1.6;
+  transition: background .15s, border-color .15s;
+}
+.procurement-form .field textarea::placeholder { color: #64758a; font-size: 11px; }
+.procurement-form .field textarea:focus { background: rgba(13, 22, 31, .5); border-color: rgba(108, 157, 255, .45); outline: none; }
+
+.tender-summary {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 22px;
+  padding: 14px;
+  border: 1px solid rgba(242, 182, 109, .12);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(242, 182, 109, .05), rgba(108, 157, 255, .025));
+}
+.tender-summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  border: 1px solid rgba(242, 182, 109, .14);
+  background: rgba(242, 182, 109, .07);
+  color: #dcc094;
+}
+.tender-summary > div { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.tender-summary strong { font-size: 12px; font-weight: 500; color: #e0eaf4; line-height: 1.5; }
+.tender-summary span { font-size: 9.5px; color: #8ea2b6; line-height: 1.5; }
+
+@media (max-width: 700px) {
+  .procurement-status-filter { flex: 1; min-width: 0; }
+  .procurement-status-filter select { flex: 1; min-width: 0; }
+  .procurement-form .form-grid { gap: 14px; }
+  .tender-summary { align-items: flex-start; }
+}

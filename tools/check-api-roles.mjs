@@ -2,6 +2,9 @@
 // запросы, которые при отсутствии прав возвращают 403 до валидации тела.
 // Отчёт: docs/database/checks/api-roles-report.json.
 import { mkdir, writeFile } from 'node:fs/promises';
+import net from 'node:net';
+// На части сетей авто-выбор семейства адресов в Node уходит в IPv6 и висит.
+net.setDefaultAutoSelectFamily(false);
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
