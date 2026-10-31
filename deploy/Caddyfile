@@ -1,0 +1,30 @@
+# HTTPS, статика клиента и прокси API. HTTP/3 отключён: на части сетей UDP
+# до сервера не доходит, и браузер вместо быстрого HTTP/2 ждёт таймаута QUIC.
+{
+    servers {
+        protocols h1 h2
+    }
+}
+
+89-104-65-61.sslip.io {
+    encode zstd gzip
+
+    header /assets/* Cache-Control "public, max-age=31536000, immutable"
+    header /index.html Cache-Control "no-cache"
+
+    handle /api/* {
+        reverse_proxy api:8080
+    }
+    handle /health {
+        reverse_proxy api:8080
+    }
+    handle /assets/* {
+        root * /srv
+        file_server
+    }
+    handle {
+        root * /srv
+        try_files {path} /index.html
+        file_server
+    }
+}

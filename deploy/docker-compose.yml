@@ -1,0 +1,54 @@
+# Стенд MEDCORE на собственном сервере: PostgreSQL, API и Caddy.
+# Запуск: скопировать каталог в /opt/medcore, создать .env с DB_PASSWORD,
+# собрать образ medcore-api (см. docs/deployment.md) и выполнить
+#   docker compose up -d
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: medcore
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: medcore
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medcore -d medcore"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    image: medcore-api:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://medcore:${DB_PASSWORD}@db:5432/medcore?sslmode=disable
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      MEDCORE_FRONTEND_ORIGINS: https://89-104-65-61.sslip.io
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./site:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  dbdata:
+  caddy_data:
+  caddy_config:
